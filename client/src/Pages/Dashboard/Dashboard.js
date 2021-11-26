@@ -1,25 +1,24 @@
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import clsx from "clsx";
-import axios from "axios";
+// import axios from "axios";
 import {
   CssBaseline,
-  Drawer,
+  // Drawer,
   AppBar,
   Toolbar,
   List,
   Typography,
   IconButton,
-  Container,
+  // Container,
   ListItem,
-  Grid,
+  // Grid,
   ListItemText,
-} from "@material-ui/core";
-import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
+} from "@mui/material";
+import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
 import useStyles from "./styles";
 import { useHistory, Link } from "react-router-dom";
 
 const Dashboard = ({ setUser }) => {
-  // const accessToken ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNzBiMWY3ODllYmFmMTBhOGM0NTA3NyIsImlhdCI6MTYxNzk5OTA1OSwiZXhwIjoxNjE4MDg1NDU5fQ.OBjtP3SotKqM73h7msDmGVEm0dYZ5YYb9NXSakdQ10Y'
   const role = JSON.parse(localStorage.getItem("profile"))?.roles[0];
   const classes = useStyles();
   let history = useHistory();
@@ -30,7 +29,7 @@ const Dashboard = ({ setUser }) => {
     history.push("/");
   };
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -44,7 +43,7 @@ const Dashboard = ({ setUser }) => {
             -webkit-transition: border-radius 2s;
           }
         `}
-        </style>
+      </style>
       {console.log(role)}
       <CssBaseline />
       <AppBar position="absolute" id="myappbar">
@@ -59,30 +58,30 @@ const Dashboard = ({ setUser }) => {
             <strong>Dashboard</strong>
           </Typography>
           <List style={{ display: "flex" }}>
-            <ListItem button color="inherit" component={Link} to="/profile" style={{borderRadius: "10px"}}>
+            <ListItem button color="inherit" component={Link} to="/profile" style={{ borderRadius: "10px" }}>
               <ListItemText style={{ color: "inherit" }}> <strong>Profile</strong></ListItemText>
             </ListItem>
 
             {role === "admin" ? (
-              <ListItem button color="inherit" component={Link} to="/admin" style={{borderRadius: "10px"}}>
+              <ListItem button color="inherit" component={Link} to="/admin" style={{ borderRadius: "10px" }}>
                 <ListItemText><strong>AddCrop</strong></ListItemText>
               </ListItem>
             ) : null}
 
-            <ListItem button color="inherit" component={Link} to="/auction" style={{borderRadius: "10px"}}>
+            <ListItem button color="inherit" component={Link} to="/auction" style={{ borderRadius: "10px" }}>
               <ListItemText><strong>Auction</strong></ListItemText>
             </ListItem>
 
-            {role ==="farmer" ? (
-              <ListItem button color="inherit" component={Link} to="/predict" style={{borderRadius: "10px"}}>
-              <ListItemText style={{ color: "inherit" }}><strong>Predict production</strong></ListItemText>
-            </ListItem>
+            {role === "farmer" ? (
+              <ListItem button color="inherit" component={Link} to="/predict" style={{ borderRadius: "10px" }}>
+                <ListItemText style={{ color: "inherit" }}><strong>Predict production</strong></ListItemText>
+              </ListItem>
             ) : null
             }
-            {role ==="farmer" ? (
-              <ListItem button color="inherit" component={Link} to="/suggest" style={{borderRadius: "10px"}}>
-              <ListItemText style={{ color: "inherit" }}><strong>Crop suggestion</strong></ListItemText>
-            </ListItem>
+            {role === "farmer" ? (
+              <ListItem button color="inherit" component={Link} to="/suggest" style={{ borderRadius: "10px" }}>
+                <ListItemText style={{ color: "inherit" }}><strong>Crop suggestion</strong></ListItemText>
+              </ListItem>
             ) : null
             }
 
@@ -92,12 +91,12 @@ const Dashboard = ({ setUser }) => {
                 color="inherit"
                 component={Link}
                 to="/createauction"
-                style={{borderRadius: "10px"}}
+                style={{ borderRadius: "10px" }}
               >
                 <ListItemText>
-                <strong>
-                  Create Auction
-                </strong>
+                  <strong>
+                    Create Auction
+                  </strong>
                 </ListItemText>
               </ListItem>
             ) : null}

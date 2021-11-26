@@ -8,10 +8,10 @@ import {
   Typography,
   IconButton,
   Collapse,
-} from "@material-ui/core";
+} from "@mui/material";
 import { useParams } from "react-router-dom";
-import CloseIcon from "@material-ui/icons/Close";
-import Alert from "@material-ui/lab/Alert";
+import CloseIcon from "@mui/icons-material/Close";
+import Alert from "@mui/material/Alert";
 import axios from "axios";
 import User from "./User";
 

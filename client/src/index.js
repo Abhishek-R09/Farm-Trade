@@ -1,14 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { AuthContextProvider } from './Context/auth'
+import { ThemeProvider } from '@mui/material';
+import theme from './theme'
 import { SnackbarProvider } from 'notistack';
-import DateAdapter from '@mui/lab/AdapterDateFns';
 
 ReactDOM.render(
   <React.StrictMode>
-    <SnackbarProvider maxSnack={3}>
-    <App />
-    </SnackbarProvider>
+    <Router>
+      <AuthContextProvider>
+        <ThemeProvider theme={theme}>
+          <SnackbarProvider maxSnack={3}>
+            <App />
+          </SnackbarProvider>
+        </ThemeProvider>
+      </AuthContextProvider>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );

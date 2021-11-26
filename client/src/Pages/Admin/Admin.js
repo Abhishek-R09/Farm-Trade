@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios"    ;
+import axios from "axios";
 import {
   Grid,
   TextField,
@@ -8,7 +8,8 @@ import {
   Typography,
   Container,
   InputLabel,
-} from "@material-ui/core";
+  // } from "@material-ui/core";
+} from "@mui/material";
 import useStyles from "./styles";
 import FileBase from "react-file-base64";
 import NumericInput from "react-numeric-input";
@@ -44,7 +45,7 @@ const Admin = () => {
 
   return (
     <Container component="main" maxWidth="xs" style={{ marginTop: "100px" }}>
-      <Paper className={classes.paper} elevation={3}>
+      <Paper className={classes.paper} elevation={3} style={{ padding: '20px' }}>
         <Typography component="h1" variant="h5">
           Crop
         </Typography>
@@ -75,13 +76,13 @@ const Admin = () => {
                   className="form-control"
                 />
               </Grid>
-              <Grid item xs={12} sm={12}>
+              {/* <Grid item xs={12} sm={12}>
                 <FileBase
                   type="file"
                   multiple={false}
                   onDone={(file) => setImage(file)}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={12}>
                 <Button variant="contained" color="secondary" type="submit">
                   Submit

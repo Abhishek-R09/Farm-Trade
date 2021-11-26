@@ -1,20 +1,19 @@
 import { useState, useEffect } from "react";
 import React from "react";
-import { Snackbar } from "@material-ui/core";
+import { Snackbar } from "@mui/material";
 import {
   Container,
   Grid,
   Typography,
   IconButton,
   Collapse,
-} from "@material-ui/core";
-import { Card } from "@material-ui/core";
-import { CardContent, Button, CardActions } from "@material-ui/core";
+} from "@mui/material";
+import { Card } from "@mui/material";
+import { CardContent, Button, CardActions } from "@mui/material";
 import { useHistory } from "react-router-dom";
-import CloseIcon from "@material-ui/icons/Close";
-import Alert from "@material-ui/lab/Alert";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import CloseIcon from "@mui/icons-material/Close";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import axios from "axios";
 // import Tile from "./Tile";
 //enqueSnackbar("hello", "success");
@@ -96,12 +95,12 @@ const Auction = () => {
   // use bootstrap for the styling
 
   return (
-    <Container style={{marginTop: "100px"}}>
+    <Container maxWidth="xl">
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography variant="h4" style={{ marginTop: "20px", color: "darkgreen" }}>
             <strong>
-            Present ongoing auctions
+              Present ongoing auctions
             </strong>
           </Typography>
           <IconButton
@@ -124,7 +123,7 @@ const Auction = () => {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h4" style={{ marginTop: "20px", color: "darkgreen" }}>
-          <strong>Future upcoming auctions </strong>
+            <strong>Future upcoming auctions </strong>
           </Typography>
           <IconButton
             style={{ float: "right" }}
@@ -138,7 +137,7 @@ const Auction = () => {
             <Grid container spacing={3}>
               {futureauction.map((auc) => (
                 <Grid item xs={12}>
-                  <Tile auc={auc} type={"future"} key={auc.tempId}/>
+                  <Tile auc={auc} type={"future"} key={auc.tempId} />
                 </Grid>
               ))}
             </Grid>
@@ -192,23 +191,23 @@ const Auction = () => {
 const Tile = (props) => {
   const [open, setOpen] = useState(false);
   const [alertmsg, setAlertmsg] = useState("");
-  const [type , setType] = useState(props.type);
+  const [type, setType] = useState(props.type);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const history = useHistory();
-  
+
   const handleClick = () => {
     setOpen(true);
-    if(type === "present"){
+    if (type === "present") {
       history.push(`/bidpage/${props.auc.tempId}`);
     }
   };
 
   const handleTile = () => {
-    if(type === "future"){
-      enqueueSnackbar("You can't bid for future auction yet!", {variant: "error"});
-    } 
-    else if(type === "past"){
-      enqueueSnackbar("You can't bid for completed auction!", {variant: "error"});
+    if (type === "future") {
+      enqueueSnackbar("You can't bid for future auction yet!", { variant: "error" });
+    }
+    else if (type === "past") {
+      enqueueSnackbar("You can't bid for completed auction!", { variant: "error" });
     }
   }
 
@@ -244,7 +243,7 @@ const Tile = (props) => {
     let timeLeft = end - now;
     let days = Math.floor(timeLeft / (60 * 60 * 24));
     let hours = Math.floor(
-      (timeLeft % (60 * 60 * 24)) / ( 60 * 60)
+      (timeLeft % (60 * 60 * 24)) / (60 * 60)
     );
     let minutes = Math.floor((timeLeft % (60 * 60)) / (60));
     let seconds = Math.floor((timeLeft % (60)));
@@ -303,7 +302,7 @@ const Tile = (props) => {
           Go to leaderboard
         </Button>
       );
-    } 
+    }
   };
 
   // when timer reaches 0, 
@@ -329,16 +328,16 @@ const Tile = (props) => {
       <CardContent>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Typography variant="h6"> <span style={{color: "darkblue"}}>Crop name: </span> {props.auc.crop?.name}</Typography>
+            <Typography variant="h6"> <span style={{ color: "darkblue" }}>Crop name: </span> {props.auc.crop?.name}</Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Typography variant="h6"><span style={{color: "darkblue"}}>Farmer name: </span> {props.auc.owner?.firstname}</Typography>
+            <Typography variant="h6"><span style={{ color: "darkblue" }}>Farmer name: </span> {props.auc.owner?.firstname}</Typography>
           </Grid>
           <Grid item xs={12} sm={12} md={4} lg={6}>
-            <Typography variant="h6"> <span style={{color: "darkblue"}}> Description: </span> {props.auc.description}</Typography>
+            <Typography variant="h6"> <span style={{ color: "darkblue" }}> Description: </span> {props.auc.description}</Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Typography variant="h6"><span style={{color: "darkblue"}}>Start price: </span> {props.auc.startprice}</Typography>
+            <Typography variant="h6"><span style={{ color: "darkblue" }}>Start price: </span> {props.auc.startprice}</Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3}>
             {showTimer()}
@@ -358,7 +357,7 @@ const Tile = (props) => {
 
 
 
-  
+
 };
 
 

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Router } from "react-router";
 import Login from "../Login/Login";
+import { Container, Typography } from "@mui/material"
 import PurchasedAuctionCard from "./components/PurchasedAuctionsCard";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import axios from "axios";
@@ -18,7 +19,7 @@ import axios from "axios";
 
 
 const ProfilePage = () => {
-  
+
   const [user, setUser] = useState(localStorage.getItem("profile") ? JSON.parse(localStorage.getItem("profile")) : {});
   const [auctionslist, setAuctionslist] = useState([]);
 
@@ -28,13 +29,13 @@ const ProfilePage = () => {
         <Router>
           <Login setUser={setUser} />
         </Router>
-      );  
+      );
     }
   }, [user]);
-  
+
   useEffect(() => {
 
-    if(auctionslist.length === 0 || auctionslist === undefined) {
+    if (auctionslist.length === 0 || auctionslist === undefined) {
       user.auctionsParticipated.map((auction, index) => {
         axios.get(`http://localhost:8080/api/auction/id/${auction}`).then(res => {
           setAuctionslist((auctionslist) => auctionslist.concat(res.data));
@@ -46,7 +47,7 @@ const ProfilePage = () => {
 
   }, [])
 
-  
+
   //   const user = {
   //     username: 'nelsonMandela',
   //     email: "nelsonMandela@gmail.com",
@@ -115,25 +116,36 @@ const ProfilePage = () => {
   // 1. Profile card
   // 2. Auction card
   return (
-    <div className="App">
-      <Header />
+    <Container maxWidth="xl" className="App">
+
+      <Typography
+        sx={{
+          color: '#1B5E20',
+          fontFamily: 'Merriweather',
+          margin: '20px auto'
+        }}
+        variant="h4"
+        component="h2"
+      >
+        Profile
+      </Typography>
       <div className="container">
         <div className="row">
           <div className="col-md-8">
             <ProfileCard user={user} />
           </div>
           <div className="col-md-8">
-            <div className="row" style={{marginTop: "20px"}} >
+            <div className="row" style={{ marginTop: "20px" }} >
               <div className="col-md-12">
                 <h3>Auctions Participated</h3>
               </div>
             </div>
             <div className="row">
               <div className="col-md-12">
-                 {user.auctionsParticipated.length === 0 ? 
+                {user.auctionsParticipated.length === 0 ?
                   <div className="alert alert-info" role="alert">
                     You have not participated in any auction yet.
-                  </div> 
+                  </div>
                   :
                   auctionslist.map((auction, index) => {
                     return <AuctionCard key={index} auction={auction} index={index} />
@@ -144,24 +156,24 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
-  </div>
+    </Container>
 
   );
 };
 
-const Header = () => {
-  return (
-    <div className="row">
-      <div className="col-md-12">
-        <h1>Profile Page</h1>
-      </div>
-    </div>
-  );
-};
+// const Header = () => {
+//   return (
+//     <div className="row">
+//       <div className="col-md-12">
+//         <h1>Profile Page</h1>
+//       </div>
+//     </div>
+//   );
+// };
 
 const ProfileCard = ({ user }) => {
   return (
-    <div className="card" style={{marginTop : "40px"}}>
+    <div className="card" style={{ marginTop: "40px" }}>
       <div className="card-body">
         <div className="row">
           <div className="col-md-4">
@@ -189,10 +201,10 @@ const epochToDate = epoch => {
   return date.toDateString()
 };
 
-const AuctionCard = ({user, auction, index}) => {
-  console.log(`auction card ${index}`, auction); 
+const AuctionCard = ({ user, auction, index }) => {
+  console.log(`auction card ${index}`, auction);
   return (
-    <div className="card" style={{marginTop: "10px"}}>
+    <div className="card" style={{ marginTop: "10px" }}>
       <div className="card-body">
         <div className="row">
           <div className="col-md-4">
@@ -203,7 +215,7 @@ const AuctionCard = ({user, auction, index}) => {
             />
           </div>
           <div className="col-md-8">
-            <h3>Auction {index+1}</h3>
+            <h3>Auction {index + 1}</h3>
             <p>Auction Description: {auction.description} </p>
             <p>Start Date: {epochToDate(Number(auction.startdate))} </p>
             <p>End Date : {epochToDate(Number(auction.startdate) + Number(auction.duration) * 60)} </p>

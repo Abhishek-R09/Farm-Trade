@@ -14,11 +14,10 @@ import {
   Select,
   MenuItem,
   InputLabel,
-} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import FlashMessage from "react-flash-message";
-import Alert from "@material-ui/lab/Alert";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import Alert from "@mui/material/Alert";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import useStyles from "./styles";
 import Input from "./Input";
 
