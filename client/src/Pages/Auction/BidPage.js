@@ -44,10 +44,10 @@ const BidPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(bid);
+    // console.log(bid);
     if (role !== "farmer") {
       const result = await axios.get(`http://localhost:8080/api/auction/${id}`);
-      console.log(result.data._id);
+      // console.log(result.data._id);
       try {
         const posres = await axios.post(
           "http://localhost:8080/api/buyer/bid",
@@ -62,7 +62,7 @@ const BidPage = () => {
             },
           }
         );
-        console.log(posres);
+        // console.log(posres);
       } catch (e) {
         console.log(e);
       }

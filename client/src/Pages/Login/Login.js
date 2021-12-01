@@ -48,9 +48,9 @@ const Login = ({ setUser }) => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(formData);
-    console.log("printing role");
-    console.log(roles);
+    // console.log(formData);
+    // console.log("printing role");
+    // console.log(roles);
     e.preventDefault();
     if (isSignup) {
       try {
@@ -63,7 +63,7 @@ const Login = ({ setUser }) => {
           confirmPassword: formData.confirmPassword,
           roles: roles,
         });
-        console.log(suc);
+        // console.log(suc);
         setAlertMsg("Successfully Registered");
       } catch (error) {
         setAlertMsg(error.response?.data.message);
@@ -76,7 +76,7 @@ const Login = ({ setUser }) => {
           password: formData.password,
         });
 
-        console.log(suc);
+        // console.log(suc);
         localStorage.setItem("profile", JSON.stringify(suc?.data));
         setUser(JSON.parse(localStorage.getItem("profile")).accessToken);
       } catch (error) {

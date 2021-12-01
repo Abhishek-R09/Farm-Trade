@@ -22,75 +22,74 @@ import Toolbar from '@mui/material/Toolbar';
 // import Typography from '@mui/material/Typography';
 import MenuAppBar from '../CustomAppBar';
 import { Link, useLocation, useHistory } from 'react-router-dom';
-import { Avatar, Button, Card, CardActions, CardHeader, ListItemButton } from '@mui/material';
+import { Avatar, Button, CardActions, CardHeader, ListItemButton } from '@mui/material';
 
 const drawerWidth = 240;
 
-const drawerLinks = [
-  {
-    text: 'Profile',
-    link: '/profile',
-    icon: <AccountCircleIcon />
-  },
-  // {
-  //   text: 'My Account',
-  //   link: '/my-account',
-  //   icon: <AccountCircleIcon />
-  // },
-  {
-    text: 'Auction',
-    link: '/auction',
-    icon: <GavelIcon />
-  },
-  // {
-  //   text: 'Dashboard',
-  //   link: '/dashboard',
-  //   icon: <DashboardIcon />
+const ResponsiveDrawer = (props) => {
+  let history = useHistory();
 
-  // },
-  // {
-  //   text: 'Marketplace',
-  //   link: '/marketplace',
-  //   icon: <ShoppingCartIcon />
-  // }
-]
+  const drawerLinks = [
+    {
+      text: 'Profile',
+      link: '/profile',
+      icon: <AccountCircleIcon />,
+    },
+    // {
+    //   text: 'My Account',
+    //   link: '/my-account',
+    //   icon: <AccountCircleIcon />
+    // },
+    {
+      text: 'Auction',
+      link: '/auction',
+      icon: <GavelIcon />
+    },
+    // {
+    //   text: 'Dashboard',
+    //   link: '/dashboard',
+    //   icon: <DashboardIcon />
 
-const adminLinks = [
-  {
-    text: 'Add Crop',
-    link: '/admin',
-    icon: <AddIcon />
-  },
-  {
-    text: 'Create Auction',
-    link: '/createauction',
-    icon: <NewReleasesIcon />
-  }
-]
-const farmerLinks = [
-  // {
-  //   text: 'New Crop',
-  //   link: '/new-crop',
-  //   icon: <AddIcon />
-  // },
-  {
-    text: 'Create Auction',
-    link: '/createauction',
-    icon: <NewReleasesIcon />
-  }
-]
+    // },
+    // {
+    //   text: 'Marketplace',
+    //   link: '/marketplace',
+    //   icon: <ShoppingCartIcon />
+    // }
+  ]
 
-function ResponsiveDrawer(props) {
+  const adminLinks = [
+    {
+      text: 'Add Crop',
+      link: '/admin',
+      icon: <AddIcon />
+    },
+    {
+      text: 'Create Auction',
+      link: '/createauction',
+      icon: <NewReleasesIcon />
+    }
+  ]
+  const farmerLinks = [
+    // {
+    //   text: 'New Crop',
+    //   link: '/new-crop',
+    //   icon: <AddIcon />
+    // },
+    {
+      text: 'Create Auction',
+      link: '/createauction',
+      icon: <NewReleasesIcon />
+    }
+  ]
   const { window, setUser } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const user = JSON.parse(localStorage.getItem("profile"));
   const role = user?.roles[0];
-  let history = useHistory();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
 
   const logout = () => {
     localStorage.clear();
@@ -100,18 +99,18 @@ function ResponsiveDrawer(props) {
 
   const drawer = user && (
     <>
-      <Toolbar />
+      <Toolbar sx={{ minHeight: '64px' }} />
       <Divider />
-      <Card>
-        <CardHeader avatar={<Avatar>{`${user.firstName[0]}${user.lastName[0]}`}</Avatar>} title={`${user.firstName} ${user.lastName}`} subheader={role} titleTypographyProps={{ component: 'title', variant: 'body1' }} />
-        <CardActions>
-          {/* <Button variant="contained" sx={{ width: '100%' }}>Signout</Button> */}
-        </CardActions>
-      </Card>
+      {/* <Card> */}
+      <CardHeader avatar={<Avatar>{`${user.firstName[0]}${user.lastName[0]}`}</Avatar>} title={`${user.firstName} ${user.lastName}`} subheader={role} titleTypographyProps={{ component: 'title', variant: 'body1' }} />
+      <CardActions>
+        {/* <Button variant="contained" sx={{ width: '100%' }}>Signout</Button> */}
+      </CardActions>
+      {/* </Card> */}
       <Divider />
       <List>
         {drawerLinks.map((link, index) => (
-          <ListItemButton component={Link} to={link.link} key={link.link}>
+          <ListItemButton component={Link} to={link.link} key={link.link} >
             <ListItemIcon>
               {link.icon}
             </ListItemIcon>
@@ -122,7 +121,7 @@ function ResponsiveDrawer(props) {
       <Divider />
       <List>
         {role === "farmer" && farmerLinks.map((link, index) => (
-          <ListItemButton component={Link} to={link.link} key={link.link}>
+          <ListItemButton component={Link} to={link.link} key={link.link} >
             <ListItemIcon>
               {link.icon}
             </ListItemIcon>
@@ -130,7 +129,7 @@ function ResponsiveDrawer(props) {
           </ListItemButton>
         ))}
         {role === "admin" && adminLinks.map((link, index) => (
-          <ListItemButton component={Link} to={link.link} key={link.link}>
+          <ListItemButton component={Link} to={link.link} key={link.link} >
             <ListItemIcon>
               {link.icon}
             </ListItemIcon>
@@ -154,7 +153,7 @@ function ResponsiveDrawer(props) {
     // <Box sx={{ display: 'flex' }}>
     <>
       <CssBaseline />
-      <MenuAppBar handleDrawerToggle={handleDrawerToggle} />
+      <MenuAppBar handleDrawerToggle={handleDrawerToggle} setUser={setUser} />
       {!(['/', '/login', '/signup'].includes(location.pathname)) && user && <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}

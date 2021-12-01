@@ -69,11 +69,11 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
     // setRemember(false);
     try {
       const suc = await axios.post("http://localhost:8080/api/auth/signin", values);
-      console.log(suc);
+      // console.log(suc);
       localStorage.setItem("profile", JSON.stringify(suc?.data));
       setUser(JSON.parse(localStorage.getItem("profile")).accessToken);
       updateUsername(JSON.parse(localStorage.getItem("profile")).username);
-      console.log("try success");
+      // console.log("try success");
       history.push("/profile");
     } catch (error) {
       console.log(error);

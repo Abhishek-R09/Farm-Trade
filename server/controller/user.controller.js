@@ -67,11 +67,13 @@ exports.getpresentauctions = async (req, res) => {
         res.status(500).send({ message: "Error! populate" });
       }
       let mypresent = [];
+      // console.log("USER CONTROLLER: PRESENT: ", auctions);
       for (const doc of auctions) {
         if (timenow < doc.startdate + doc.duration * 60) {
           mypresent.push(doc);
         }
       }
+      // console.log("USER CONTROLLER: PRESENT: ", mypresent);
       res.status(200).send(mypresent);
     });
 };
@@ -87,11 +89,13 @@ exports.getfutureauctions = async (req, res) => {
         res.status(500).send({ message: "Error! populate" });
       }
       let myfuture = [];
+      console.log("USER CONTROLLER: FUTURE: ", auctions);
       for (const doc of auctions) {
         if (timenow < doc.startdate) {
           myfuture.push(doc);
         }
       }
+      console.log("USER CONTROLLER: FUTURE: ", myfuture);
       res.status(200).send(myfuture);
     });
 };

@@ -25,7 +25,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     User.findOne({
       email: req.body.email,
     }).exec((err, user) => {
-      console.log(user);
+      // console.log(user);
       if (err) {
         res.status(500).send({ message: err });
         return;
@@ -42,7 +42,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
 };
 
 checkRolesExisted = (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   if (req.body.roles) {
     // console.log("roles here");
     // console.log(ROLES);

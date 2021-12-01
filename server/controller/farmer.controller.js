@@ -23,24 +23,24 @@ const toUnixTime = (date) => {
   const day = parseInt(dateArr2[2]);
   const hour = parseInt(timeArr[0]);
   const minute = parseInt(timeArr[1]);
-  return new Date(year, month - 1, day, hour, minute).getTime()/1000;
+  return new Date(year, month - 1, day, hour, minute).getTime() / 1000;
 };
 
 
 exports.createauction = (req, res) => {
-  console.log("data received for auction is : \n ");
-  console.log(req.body);
+  // console.log("data received for auction is : \n ");
+  // console.log(req.body);
   const auctionid = Math.random().toString(36).substring(2, 15);
-  console.log(toUnixTime(req.body.startdate));
+  // console.log(toUnixTime(req.body.startdate));
   const auction = new Auction({
-    
+
     startdate: toUnixTime(req.body.startdate),  // send unix timestamp
     duration: req.body.duration,      // sen durations in minutes
     harvestdate: req.body.harvestdate,   // send as recieved from frontend
     crop: req.body.crop.id,    //  send crop id 
     quantity: Number(req.body.quantity),     // send as integer
-    owner: req.userid,        
-    description: req.body.description,  
+    owner: req.userid,
+    description: req.body.description,
     startprice: Number(req.body.startprice),      // send as number
     bids: [
       {
@@ -52,15 +52,15 @@ exports.createauction = (req, res) => {
     tempId: auctionid,
   });
 
-  console.log("auction created", auction);
+  // console.log("auction created", auction);
 
   auction.save((err, auctiondoc) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
-    console.log("Auction is sccheduled by farmer and added to datbase");
-    console.log("auction id is" + auctiondoc._id);
+    // console.log("Auction is sccheduled by farmer and added to datbase");
+    // console.log("auction id is" + auctiondoc._id);
     User.findById(req.userid).then((user) => {
       user.auctionsParticipated.push(auctiondoc._id);
       user.save();
@@ -111,7 +111,7 @@ exports.getcroplist = (req, res) => {
         if (err) {
           res.status(500).send({ message: "Error! populate" });
         }
-        console.log(farmeruser);
+        // console.log(farmeruser);
         res.status(200).send(farmeruser);
       });
   });

@@ -13,7 +13,9 @@ const HomePage = () => {
             position: 'relative',
             top: '90px',
             pt: 4,
-            marginLeft: '70px',
+            marginLeft: { xxs: '20px', xs: '70px' },
+            fontSize: { xxs: '2.5em', xs: '3.5em' },
+            align: 'left'
           }}
           variant="h2"
           component="h1"

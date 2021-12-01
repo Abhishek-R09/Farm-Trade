@@ -5,13 +5,13 @@
 // 4. text input for area with minimum value of 1 and max value 300
 // 5. a button to submit the form which would send the data to the server
 // with url : https://mlagrohelp-xipqzrlqna-el.a.run.app/yield
-import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
+// import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import axios from "axios";
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function PredictPage({ user }) {
-    let District_Name= {
+    let District_Name = {
         "agra": 0,
         "aligarh": 1,
         "allahabad": 2,
@@ -89,9 +89,9 @@ export default function PredictPage({ user }) {
         "varanasi": 74
     }
     let Seasons = {
-        "kharif     ": 0, 
+        "kharif     ": 0,
         "rabi       ": 1,
-        "summer     ": 2, 
+        "summer     ": 2,
         "whole year ": 3
     }
     let Crops = {
@@ -138,7 +138,7 @@ export default function PredictPage({ user }) {
         "urad": 40,
         "wheat": 41
     }
-    
+
     const [district, setDistrict] = useState("");
     const [crop, setCrop] = useState("");
     const [season, setSeason] = useState("");
@@ -171,7 +171,7 @@ export default function PredictPage({ user }) {
             season: Seasons[season],
             area: Number(area)
         }
-        console.log(data)
+        // console.log(data)
         axios.post("https://mlagrohelp-xipqzrlqna-el.a.run.app/yeild", data)
             .then(res => {
                 setPrediction(res.data);
@@ -182,63 +182,63 @@ export default function PredictPage({ user }) {
             })
     }
 
-    
+
 
 
 
     return (
         prediction === "" || prediction === null || prediction === undefined ?
-        <div className="container" style={{marginTop: "15vh", border: "1.5px solid black" }} >
-            <div className="row">
-                <div className="col-md-6 offset-md-3">
-                    <h1 className="text-center" style={{ color: "darkgreen"}}> <strong>Yield Prediction</strong></h1>
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group p-2">
-                            <label style={{color: "darkblue"}}>District</label>
-                            <select className="form-control" onChange={(e) => setDistrict(e.target.value)} style={{border: "1.5px solid black"}}>
-                                <option value="">Select District</option>
-                                {Object.keys(District_Name).map((item, index) => {
-                                    return (
-                                        <option key={index} value={item}>{item}</option>   
-                                    )
-                                })}
-                            </select>
-                        </div>
-                        <div className="form-group p-2">
-                            <label style={{color: "darkblue"}}>Crop</label>
-                            <select className="form-control" onChange={(e) => setCrop(e.target.value)} style={{border: "1.5px solid black"}}>
-                                <option value="">Select Crop</option>
-                                {Object.keys(Crops).map((item, index) => {
-                                    return (
-                                        <option key={index} value={item}>{item}</option>
-                                    )
-                                })}
-                            </select>
-                        </div>
-                        <div className="form-group p-2">
-                            <label style={{color: "darkblue"}}>Season</label>
-                            <select className="form-control" onChange={(e) => setSeason(e.target.value)} style={{border: "1.5px solid black"}}>
-                                <option value="">Select Season</option>
-                                {Object.keys(Seasons).map((item, index) => {
-                                    return (
-                                        <option key={index} value={item}>{item}</option>
-                                    )
-                                })}
-                            </select>
-                        </div>
-                        <div className="form-group p-2">
-                            <label style={{color: "darkblue"}}>Area (in hector)</label>
-                            <input type="text" className="form-control" onChange={(e) => setArea(e.target.value)} style={{border: "1.5px solid black"}} />
-                        </div>
-                        <button type="submit" className="btn btn-primary btn-block" style={{ marginTop: "20px", marginBottom: "30px", marginLeft: "7px"}}>Predict</button>
-                    </form>
-                    {/* <h3 className="text-center">{prediction}</h3> */}
+            <div className="container" style={{ marginTop: "15vh", border: "1.5px solid black" }} >
+                <div className="row">
+                    <div className="col-md-6 offset-md-3">
+                        <h1 className="text-center" style={{ color: "darkgreen" }}> <strong>Yield Prediction</strong></h1>
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-group p-2">
+                                <label style={{ color: "darkblue" }}>District</label>
+                                <select className="form-control" onChange={(e) => setDistrict(e.target.value)} style={{ border: "1.5px solid black" }}>
+                                    <option value="">Select District</option>
+                                    {Object.keys(District_Name).map((item, index) => {
+                                        return (
+                                            <option key={index} value={item}>{item}</option>
+                                        )
+                                    })}
+                                </select>
+                            </div>
+                            <div className="form-group p-2">
+                                <label style={{ color: "darkblue" }}>Crop</label>
+                                <select className="form-control" onChange={(e) => setCrop(e.target.value)} style={{ border: "1.5px solid black" }}>
+                                    <option value="">Select Crop</option>
+                                    {Object.keys(Crops).map((item, index) => {
+                                        return (
+                                            <option key={index} value={item}>{item}</option>
+                                        )
+                                    })}
+                                </select>
+                            </div>
+                            <div className="form-group p-2">
+                                <label style={{ color: "darkblue" }}>Season</label>
+                                <select className="form-control" onChange={(e) => setSeason(e.target.value)} style={{ border: "1.5px solid black" }}>
+                                    <option value="">Select Season</option>
+                                    {Object.keys(Seasons).map((item, index) => {
+                                        return (
+                                            <option key={index} value={item}>{item}</option>
+                                        )
+                                    })}
+                                </select>
+                            </div>
+                            <div className="form-group p-2">
+                                <label style={{ color: "darkblue" }}>Area (in hector)</label>
+                                <input type="text" className="form-control" onChange={(e) => setArea(e.target.value)} style={{ border: "1.5px solid black" }} />
+                            </div>
+                            <button type="submit" className="btn btn-primary btn-block" style={{ marginTop: "20px", marginBottom: "30px", marginLeft: "7px" }}>Predict</button>
+                        </form>
+                        {/* <h3 className="text-center">{prediction}</h3> */}
+                    </div>
                 </div>
             </div>
-        </div>
-        :
-        <div className="container" style={{marginTop: "40px"}} >
-            <div className="col-md-6 offset-md-3">
+            :
+            <div className="container" style={{ marginTop: "40px" }} >
+                <div className="col-md-6 offset-md-3">
                     <h1 className="text-center">Yield Prediction</h1>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group p-2">
@@ -257,24 +257,24 @@ export default function PredictPage({ user }) {
                             <label>Area</label>
                             <h4>{area + " hectors"}</h4>
                         </div>
-                        
+
                     </form>
                     {/* <h3 className="text-center">{prediction}</h3> */}
                 </div>
-            <div className="row">
-                <div className="col-md-6 offset-md-3">
-                    <h2 className="text-center">Predicted Yield</h2>
-                    <h3 className="text-center">{prediction.production + " tons"}</h3>
+                <div className="row">
+                    <div className="col-md-6 offset-md-3">
+                        <h2 className="text-center">Predicted Yield</h2>
+                        <h3 className="text-center">{prediction.production + " tons"}</h3>
+                    </div>
                 </div>
-            </div>
-            <div className="row">
-                <div className="col-md-6 offset-md-3">
-                    <button type="submit" className="btn btn-primary btn-block" onClick={handleClose}
-                    >Close</button>
+                <div className="row">
+                    <div className="col-md-6 offset-md-3">
+                        <button type="submit" className="btn btn-primary btn-block" onClick={handleClose}
+                        >Close</button>
+                    </div>
                 </div>
-            </div>
 
-        </div>
+            </div>
     )
 }
 

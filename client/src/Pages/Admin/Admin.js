@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import axios from "axios";
 import {
@@ -7,11 +8,11 @@ import {
   Paper,
   Typography,
   Container,
-  InputLabel,
+  // InputLabel,
   // } from "@material-ui/core";
 } from "@mui/material";
 import useStyles from "./styles";
-import FileBase from "react-file-base64";
+// import FileBase from "react-file-base64";
 import NumericInput from "react-numeric-input";
 
 const Admin = () => {
@@ -24,7 +25,7 @@ const Admin = () => {
   const classes = useStyles();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(cropName, username, rating, image);
+    // console.log(cropName, username, rating, image);
     const res = await axios.post(
       "http://localhost:8080/api/admin/addcrop",
       {
@@ -40,7 +41,7 @@ const Admin = () => {
       }
     );
 
-    console.log(res);
+    // console.log(res);
   };
 
   return (

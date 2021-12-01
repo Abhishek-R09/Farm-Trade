@@ -10,9 +10,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { Link, useLocation } from 'react-router-dom';
-import HomeIcon from '@mui/icons-material/Home';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import { Link, useLocation, useHistory } from 'react-router-dom';
+// import HomeIcon from '@mui/icons-material/Home';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Logout from '@mui/icons-material/Logout';
 // import LoginIcon from '@mui/icons-material/Login';
 // import PersonAddIcon from '@mui/icons-material/PersonAdd';
 // import { AuthContext } from '../../Context/auth';
@@ -22,10 +24,12 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 export default function MenuAppBar(props) {
   // eslint-disable-next-line no-unused-vars
   // const auth = React.useContext(AuthContext)
+  const { setUser } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const user = JSON.parse(localStorage.getItem("profile"));
 
   const location = useLocation();
+  let history = useHistory();
 
   // if (location.pathname === '/login' || location.pathname === '/signup') {
   //   return <></>;
@@ -39,6 +43,13 @@ export default function MenuAppBar(props) {
     setAnchorEl(null);
   };
 
+  const logout = () => {
+    localStorage.clear();
+    setUser(null);
+    history.push("/");
+    handleClose();
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -49,7 +60,7 @@ export default function MenuAppBar(props) {
           zIndex: (theme) => theme.zIndex.drawer + 1
         }}>
         <Toolbar>
-          <IconButton
+          {!(location.pathname === '/') && user && <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
@@ -57,7 +68,7 @@ export default function MenuAppBar(props) {
             sx={{ mr: 2, display: { sm: 'none' } }}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton>}
           <div style={{ flexGrow: 1 }}>
             <Typography
               variant="h5"
@@ -69,7 +80,7 @@ export default function MenuAppBar(props) {
             </Typography>
           </div>
           {location.pathname === '/' && user && <Button
-            sx={{ marginRight: '10px' }}
+            sx={{ marginRight: '10px', display: { xxs: 'none', xs: 'inline-flex' } }}
             component={Link}
             to="/auction"
             variant="contained"
@@ -98,7 +109,7 @@ export default function MenuAppBar(props) {
             Home
           </Button>*/}
           {user && (
-            <div>
+            <>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -106,14 +117,14 @@ export default function MenuAppBar(props) {
                 aria-haspopup="true"
                 onClick={handleMenu}
               >
-                <Avatar>F</Avatar>
+                <Avatar sx={{ bgcolor: "secondary.main" }}>{`${user.firstName[0]}${user.lastName[0]}`}</Avatar>
               </IconButton>
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: 'center',
+                  horizontal: 'left',
                 }}
                 keepMounted
                 PaperProps={{
@@ -142,22 +153,34 @@ export default function MenuAppBar(props) {
                     },
                   },
                 }}
-                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                // anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                // transformOrigin={{
-                //   vertical: 'top',
-                //   horizontal: 'right',
-                // }}
+                transformOrigin={{ horizontal: 'left', vertical: 'center' }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem component={Link} to="/profile" onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem component={Link} to="/profile" onClick={handleClose}>
+                  <ListItemIcon>
+                    <AccountCircle fontSize="small" />
+                  </ListItemIcon>
+                  Profile
+                </MenuItem>
+                {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
+                <MenuItem sx={{ display: { xxs: 'flex', sm: 'none' } }} component={Link} to="/auction" onClick={handleClose}>
+                  <ListItemIcon>
+                    <ShoppingCartIcon fontSize="small" />
+                  </ListItemIcon>
+                  Auction
+                </MenuItem>
+                <MenuItem onClick={logout}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
               </Menu>
-            </div>
+            </>
           )}
           {!user && (<>
-            <div>
+            <>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -171,8 +194,8 @@ export default function MenuAppBar(props) {
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: 'center',
+                  horizontal: 'left',
                 }}
                 keepMounted
                 PaperProps={{
@@ -201,40 +224,29 @@ export default function MenuAppBar(props) {
                     },
                   },
                 }}
-                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                // anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                transformOrigin={{ horizontal: 'left', vertical: 'center' }}
+                // anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
                 // transformOrigin={{
-                //   vertical: 'top',
-                //   horizontal: 'right',
+                //   vertical: 'cemter',
+                //   horizontal: 'center',
                 // }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem component={Link} to="/login" onClick={handleClose}>Login</MenuItem>
-                <MenuItem component={Link} to="/signup" onClick={handleClose}>Signup</MenuItem>
+                <MenuItem component={Link} to="/login" onClick={handleClose}>
+                  <ListItemIcon>
+                    <AccountCircle fontSize="small" />
+                  </ListItemIcon>
+                  Login
+                </MenuItem>
+                <MenuItem component={Link} to="/signup" onClick={handleClose}>
+                  <ListItemIcon>
+                    <AccountCircle fontSize="small" />
+                  </ListItemIcon>
+                  Signup
+                </MenuItem>
               </Menu>
-            </div>
-            {/* <>
-              <Button
-                sx={{ marginRight: '10px' }}
-                component={Link}
-                to="/login"
-                variant="contained"
-                color="primary"
-                startIcon={<LoginIcon />}
-              >
-                Login
-              </Button>
-              <Button
-                component={Link}
-                to="/signup"
-                variant="contained"
-                color="primary"
-                startIcon={<PersonAddIcon />}
-              >
-                Signup
-              </Button>
-            </> */}
+            </>
           </>
           )}
         </Toolbar>

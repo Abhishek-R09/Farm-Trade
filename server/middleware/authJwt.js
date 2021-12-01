@@ -16,7 +16,7 @@ verifyToken = (req, res, next) => {
   //console.log(process.env.JWT_SECRET)
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      console.log(err);
+      // console.log(err);
       return res.status(401).send({ message: "err!" });
     }
     req.userid = decoded.id;

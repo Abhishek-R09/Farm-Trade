@@ -50,22 +50,22 @@ exports.addcrop = (req, res) => {
           res.status(500).send({ message: err });
           return;
         }
-        console.log("farmeruser's id is");
-        console.log(farmeruser._id);
+        // console.log("farmeruser's id is");
+        // console.log(farmeruser._id);
         farmeruser.crops.push(cropdoc._id);
         farmeruser.save((err, farmeruser) => {
           if (err) {
             res.status(500).send({ message: err });
             return;
           }
-          console.log("farmer saved successfully.");
+          // console.log("farmer saved successfully.");
         });
         /*db.farmer.update(
                         {_id: farmeruser._id},
                         {$push: {crops: cropdoc._id}}
                     );*/
-        console.log("crop added.");
-        console.log(cropdoc);
+        // console.log("crop added.");
+        // console.log(cropdoc);
       });
       res.status(200).send({ message: "Crop was added successfully" });
     });

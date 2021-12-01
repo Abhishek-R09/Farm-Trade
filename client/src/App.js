@@ -6,12 +6,13 @@ import SignInPage from './Pages/Signin';
 import SignupPage from './Pages/Signup';
 // import Login from './Pages/Login/Login'
 import Auction from './Pages/Auction/Auction'
-import Dashboard from './Pages/Dashboard/Dashboard'
+// import Dashboard from './Pages/Dashboard/Dashboard'
 import BidPage from './Pages/Auction/BidPage'
 import Admin from './Pages/Admin/Admin'
 // import Leaderboard from './components/Auction/Leaderboard'
 import FarmerForm from './Pages/FarmerForm/FarmerForm'
-import ProfilePage from './Pages/ProfilePage/ProfilePage'
+// import ProfilePage from './Pages/ProfilePage/ProfilePage'
+import ProfilePage from './Pages/Profile'
 import SuggestionPage from './Pages/tools/SuggestionPage'
 import PredictPage from './Pages/tools/PredictPage'
 import ResponsiveDrawer from './Components/Drawer';
@@ -25,7 +26,7 @@ const App = () => {
   // eslint-disable-next-line no-unused-vars
   const [username, setUsername] = useState(localStorage.getItem("profile") ? JSON.parse(localStorage.getItem("profile")).username : "");
 
-  console.log("starting of the app username is", username)
+  // console.log("starting of the app username is", username)
 
   const location = useLocation();
 
@@ -37,7 +38,7 @@ const App = () => {
   //   );
   // }
 
-  console.log("user value in app.js is ", user);
+  // console.log("user value in app.js is ", user);
 
   return (
     <>

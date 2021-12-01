@@ -9,7 +9,7 @@ import {
   Collapse,
 } from "@mui/material";
 import { Card } from "@mui/material";
-import { CardContent, Button, CardActions } from "@mui/material";
+import { CardContent, Button } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -18,7 +18,8 @@ import axios from "axios";
 // import Tile from "./Tile";
 //enqueSnackbar("hello", "success");
 import { useSnackbar } from 'notistack';
-import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
+import { withRouter } from 'react-router-dom'
+// import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
 
 const Auction = () => {
   const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
@@ -33,40 +34,53 @@ const Auction = () => {
   const [presentauction, setPresentAuction] = useState([]);
   const [futureauction, setFutureAuction] = useState([]);
 
+  const [loading, setLoading] = useState(false);
 
-  useEffect(async () => {
-    console.log(accessToken);
-    const result1 = await axios.get(
-      "http://localhost:8080/api/getpresentauction",
-      {
-        headers: {
-          "x-access-token": accessToken,
-        },
-      }
-    );
-    setPresentAuction(result1.data);
-    console.log(result1.data)
-    const result2 = await axios.get(
-      "http://localhost:8080/api/getfutureauction",
-      {
-        headers: {
-          "x-access-token": accessToken,
-        },
-      }
-    );
-    setFutureAuction(result2.data);
-    console.log(result2.data)
-    const result3 = await axios.get(
-      "http://localhost:8080/api/getpastauction",
-      {
-        headers: {
-          "x-access-token": accessToken,
-        },
-      }
-    );
-    setPastAuction(result3.data);
-    console.log(result3.data)
-  }, []);
+
+  useEffect(() => {
+    // console.log("AUCTION USEFFECT CALLED");
+    setLoading(true);
+    const fetchActions = async () => {
+      // console.log("AUCTION fetchActions USEFFECT CALLED");
+      const result1 = await axios.get(
+        "http://localhost:8080/api/getpresentauction",
+        {
+          headers: {
+            "x-access-token": accessToken,
+          },
+        }
+      );
+      setPresentAuction(result1.data);
+      // console.log(result1.data)
+      const result2 = await axios.get(
+        "http://localhost:8080/api/getfutureauction",
+        {
+          headers: {
+            "x-access-token": accessToken,
+          },
+        }
+      );
+      setFutureAuction(result2.data);
+      // console.log(result2.data)
+      const result3 = await axios.get(
+        "http://localhost:8080/api/getpastauction",
+        {
+          headers: {
+            "x-access-token": accessToken,
+          },
+        }
+      );
+      setPastAuction(result3.data);
+      // console.log(result3.data)
+    }
+    fetchActions();
+    setLoading(false);
+    return () => {
+      setPastAuction([])
+      setPresentAuction([])
+      setFutureAuction([])
+    }
+  }, [accessToken]);
 
   const handleClick1 = () => {
     setDrop1((prev) => !prev);
@@ -79,6 +93,10 @@ const Auction = () => {
   const handleClick3 = () => {
     setDrop3((prev) => !prev);
   };
+
+  // console.log(presentauction);
+  // console.log(futureauction);
+  // console.log(pastauction);
 
   // create a auction display page which would have 3 droppable sections. 
   // 1. present ongoing auctions. 
@@ -96,7 +114,9 @@ const Auction = () => {
 
   return (
     <Container maxWidth="xl">
-      <Grid container spacing={3}>
+      {loading && 'Loading...'}
+
+      {!loading && <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography variant="h4" style={{ marginTop: "20px", color: "darkgreen" }}>
             <strong>
@@ -165,7 +185,8 @@ const Auction = () => {
             </Grid>
           </Collapse>
         </Grid>
-      </Grid>
+      </Grid>}
+
       <Snackbar
         open={open}
         autoHideDuration={6000}
@@ -319,10 +340,6 @@ const Tile = (props) => {
     }
   }, [timeLeft.seconds, timeLeft.minutes, timeLeft.hours, timeLeft.days]);
 
-
-
-
-
   return (
     <Card style={{ marginTop: "10px", width: "70vw" }} onClick={handleTile} >
       <CardContent>
@@ -352,14 +369,6 @@ const Tile = (props) => {
 
   );
 
-
-
-
-
-
-
 };
-
-
 
 export default Auction;

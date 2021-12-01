@@ -37,8 +37,8 @@ exports.signup = (req, res) => {
           res.status(500).send({ message: err });
           return;
         }
-        console.log(farmuser);
-        console.log("farmer doc added sucesfully");
+        // console.log(farmuser);
+        // console.log("farmer doc added sucesfully");
       });
     }
 
@@ -66,7 +66,7 @@ exports.signup = (req, res) => {
               user.email,
               user.confirmationCode
             );
-            console.log("EMail sent");
+            // console.log("EMail sent");
           });
         }
       );
@@ -91,7 +91,7 @@ exports.signup = (req, res) => {
             user.confirmationCode
           );
 
-          console.log("EMail sent");
+          // console.log("EMail sent");
         });
       });
     }
@@ -99,8 +99,8 @@ exports.signup = (req, res) => {
 };
 
 exports.signin = (req, res) => {
-  console.log("inside signin of auth.route.js " + req.body.username);
-  console.log(req.body);
+  // console.log("inside signin of auth.route.js " + req.body.username);
+  // console.log(req.body);
 
   User.findOne({
     username: req.body.username,
@@ -126,7 +126,7 @@ exports.signin = (req, res) => {
         req.body.password,
         user.password
       );
-      console.log("checking password");
+      // console.log("checking password");
       if (!passwordIsValid) {
         return res.status(401).send({
           accessToken: null,
@@ -138,7 +138,7 @@ exports.signin = (req, res) => {
         expiresIn: time, // 24 hours
       });
 
-      console.log("token is " + token);
+      // console.log("token is " + token);
 
       var authorities = [];
 
@@ -161,8 +161,8 @@ exports.signin = (req, res) => {
 };
 
 exports.verifyUser = (req, res, next) => {
-  console.log("i got req as ");
-  console.log(req.params);
+  // console.log("i got req as ");
+  // console.log(req.params);
   User.findOne({
     confirmationCode: req.params.confirmationCode,
   })

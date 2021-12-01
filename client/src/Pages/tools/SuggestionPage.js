@@ -4,7 +4,7 @@ import Center from "react-center";
 import Spinner from "react-spinkit";
 
 import axios from "axios";
-import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
+// import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
 
 // create a form with
 // a text input for N with max value of 140
@@ -74,7 +74,7 @@ const SuggestionPage = ({ user }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		
+
 		console.log("handle submit called");
 		// check if any of the inputs are empty
 		if (
@@ -240,278 +240,278 @@ const SuggestionPage = ({ user }) => {
 			<Center>
 				<Spinner animation="border" variant="primary" />
 			</Center>
-			
-		) : (
-		suggestionResult == "" || suggestionResult == null || suggestionResult == undefined ? 
-		<div className="container" style={{ border: "1.5px solid black", marginTop:"15vh" }}>
-			<div className="row">
-				<div className="col-md-12">
-					<div className="card m-5" style={{ border: "1.5px solid darkgreen" }}>
-						<div className="card-header">
-							<h3 style={{ color: "darkgreen" }}>
-								<i className="fas fa-leaf"></i>
-								<strong>Crop Suggestion</strong>
-							</h3>
-						</div>
-						<div className="card-body">
-							<div className="row">
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											pH
-										</label>
-										<input
-											type="number"
-											className="form-control"
-											name="ph"
-											value={suggestion.ph}
-											onChange={handleChange}
-											style={{ border: "1.5px solid black" }}
-										/>
-									</div>
-								</div>
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											Temperature
-										</label>
-										<input
-											type="number"
-											className="form-control"
-											name="temperature"
-											value={suggestion.temperature}
-											onChange={handleChange}
-											style={{ border: "1.5px solid black" }}
-										/>
-									</div>
-								</div>
-							</div>
-							<div className="row">
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											Humidity
-										</label>
-										<input
-											type="number"
-											className="form-control"
-											name="humidity"
-											value={suggestion.humidity}
-											onChange={handleChange}
-											style={{ border: "1.5px solid black" }}
-										/>
-									</div>
-								</div>
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											N (Nitrogen)
-										</label>
-										<input
-											type="number"
-											className="form-control"
-											name="N"
-											value={suggestion.N}
-											onChange={handleChange}
-											style={{ border: "1.5px solid black" }}
-										/>
-									</div>
-								</div>
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											P (Phosphorus)
-										</label>
-										<input
-											type="number"
-											className="form-control"
-											name="P"
-											value={suggestion.P}
-											onChange={handleChange}
-											style={{ border: "1.5px solid black" }}
-										/>
-									</div>
-								</div>
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											Rainfall
-										</label>
-										<input
-											type="number"
-											className="form-control"
-											name="rainfall"
-											value={suggestion.rainfall}
-											onChange={handleChange}
-											style={{ border: "1.5px solid black" }}
-										/>
-									</div>
-								</div>
-							</div>
-							<div className="row">
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											K (Potassium)
-										</label>
-										<input
-											type="number"
-											className="form-control"
-											name="K"
-											value={suggestion.K}
-											onChange={handleChange}
-											style={{ border: "1.5px solid black" }}
-										/>
-									</div>
-								</div>
-							</div>
-							<div className="row">
-								
-							</div>
-						</div>
-						<div className="modal-footer">
-							<button
-								type="button"
-								className="btn btn-secondary"
-								data-dismiss="modal"
-								onClick={handleClose}
-							>
-								Clear All
-							</button>
-							<button
-								type="submit"
-								className="btn btn-primary"
-								onClick={handleSubmit}
-							>
-								Suggest
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> 
-		: 
-		// {/* if suggestion result is not empty, we will show the suggestion result along with input values from suggestion state */}
-		<div className="container m-5">
-			<div className="row">
-				<div className="col-md-12">
-					<div className="card m-5">
-						<div className="card-header">
-							<h3>
-								<i className="fas fa-leaf"></i>
-								Crop Suggestion Result
-							</h3>
-						</div>
-						<div className="card-body">
-							<div className="row">
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											pH
-										</label>
-										<h4>{suggestion.ph}</h4>
-									</div>
-								</div>
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											Temperature
-										</label>
-										<h4>{suggestion.temperature}</h4>
-									</div>
-								</div>
-							</div>
-							<div className="row">
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											Humidity
-										</label>
-										<h4>{suggestion.humidity}</h4>
-									</div>
-								</div>
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											N (Nitrogen)
-										</label>
-										<h4>{suggestion.N}</h4>
-									</div>
-								</div>
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											P (Phosphorus)
-										</label>
-										<h4>{suggestion.P}</h4>
-									</div>
-								</div>
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											Rainfall
-										</label>
-										<h4>{suggestion.rainfall}</h4>
-									</div>
-								</div>
-							</div>
-							<div className="row">
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											K (Potassium)
-										</label>
-										<h4>{suggestion.K}</h4>
-									</div>
-								</div>
-							</div>
-						
-							<br/>
-							<div className="row">
-								<div className="col-md-6">
-									<div className="form-group p-2">
-										<label style={{color: "darkblue"}}>
-											<i className="fas fa-leaf"></i>
-											Suggested Crop
-										</label>
-										<h2>{suggestionResult.crop}</h2>
-									</div>
-								</div>
-							</div>
-						</div>
 
-						<div className="modal-footer">
-							<button
-								type="button"
-								className="btn btn-secondary"
-								data-dismiss="modal"
-								onClick={handlePredictClose}
-							>
-								Close
-							</button>
-							
+		) : (
+			suggestionResult == "" || suggestionResult == null || suggestionResult == undefined ?
+				<div className="container" style={{ border: "1.5px solid black", marginTop: "15vh" }}>
+					<div className="row">
+						<div className="col-md-12">
+							<div className="card m-5" style={{ border: "1.5px solid darkgreen" }}>
+								<div className="card-header">
+									<h3 style={{ color: "darkgreen" }}>
+										<i className="fas fa-leaf"></i>
+										<strong>Crop Suggestion</strong>
+									</h3>
+								</div>
+								<div className="card-body">
+									<div className="row">
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													pH
+												</label>
+												<input
+													type="number"
+													className="form-control"
+													name="ph"
+													value={suggestion.ph}
+													onChange={handleChange}
+													style={{ border: "1.5px solid black" }}
+												/>
+											</div>
+										</div>
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													Temperature
+												</label>
+												<input
+													type="number"
+													className="form-control"
+													name="temperature"
+													value={suggestion.temperature}
+													onChange={handleChange}
+													style={{ border: "1.5px solid black" }}
+												/>
+											</div>
+										</div>
+									</div>
+									<div className="row">
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													Humidity
+												</label>
+												<input
+													type="number"
+													className="form-control"
+													name="humidity"
+													value={suggestion.humidity}
+													onChange={handleChange}
+													style={{ border: "1.5px solid black" }}
+												/>
+											</div>
+										</div>
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													N (Nitrogen)
+												</label>
+												<input
+													type="number"
+													className="form-control"
+													name="N"
+													value={suggestion.N}
+													onChange={handleChange}
+													style={{ border: "1.5px solid black" }}
+												/>
+											</div>
+										</div>
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													P (Phosphorus)
+												</label>
+												<input
+													type="number"
+													className="form-control"
+													name="P"
+													value={suggestion.P}
+													onChange={handleChange}
+													style={{ border: "1.5px solid black" }}
+												/>
+											</div>
+										</div>
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													Rainfall
+												</label>
+												<input
+													type="number"
+													className="form-control"
+													name="rainfall"
+													value={suggestion.rainfall}
+													onChange={handleChange}
+													style={{ border: "1.5px solid black" }}
+												/>
+											</div>
+										</div>
+									</div>
+									<div className="row">
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													K (Potassium)
+												</label>
+												<input
+													type="number"
+													className="form-control"
+													name="K"
+													value={suggestion.K}
+													onChange={handleChange}
+													style={{ border: "1.5px solid black" }}
+												/>
+											</div>
+										</div>
+									</div>
+									<div className="row">
+
+									</div>
+								</div>
+								<div className="modal-footer">
+									<button
+										type="button"
+										className="btn btn-secondary"
+										data-dismiss="modal"
+										onClick={handleClose}
+									>
+										Clear All
+									</button>
+									<button
+										type="submit"
+										className="btn btn-primary"
+										onClick={handleSubmit}
+									>
+										Suggest
+									</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+				:
+				// {/* if suggestion result is not empty, we will show the suggestion result along with input values from suggestion state */}
+				<div className="container m-5">
+					<div className="row">
+						<div className="col-md-12">
+							<div className="card m-5">
+								<div className="card-header">
+									<h3>
+										<i className="fas fa-leaf"></i>
+										Crop Suggestion Result
+									</h3>
+								</div>
+								<div className="card-body">
+									<div className="row">
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													pH
+												</label>
+												<h4>{suggestion.ph}</h4>
+											</div>
+										</div>
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													Temperature
+												</label>
+												<h4>{suggestion.temperature}</h4>
+											</div>
+										</div>
+									</div>
+									<div className="row">
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													Humidity
+												</label>
+												<h4>{suggestion.humidity}</h4>
+											</div>
+										</div>
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													N (Nitrogen)
+												</label>
+												<h4>{suggestion.N}</h4>
+											</div>
+										</div>
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													P (Phosphorus)
+												</label>
+												<h4>{suggestion.P}</h4>
+											</div>
+										</div>
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													Rainfall
+												</label>
+												<h4>{suggestion.rainfall}</h4>
+											</div>
+										</div>
+									</div>
+									<div className="row">
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													K (Potassium)
+												</label>
+												<h4>{suggestion.K}</h4>
+											</div>
+										</div>
+									</div>
+
+									<br />
+									<div className="row">
+										<div className="col-md-6">
+											<div className="form-group p-2">
+												<label style={{ color: "darkblue" }}>
+													<i className="fas fa-leaf"></i>
+													Suggested Crop
+												</label>
+												<h2>{suggestionResult.crop}</h2>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div className="modal-footer">
+									<button
+										type="button"
+										className="btn btn-secondary"
+										data-dismiss="modal"
+										onClick={handlePredictClose}
+									>
+										Close
+									</button>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 		)
 	);
-							
+
 };
 
 // a circular loading indicator

@@ -77,7 +77,7 @@ const SignupPage = () => {
 
     try {
       const suc = await axios.post("http://localhost:8080/api/auth/signup", values);
-      console.log(suc);
+      // console.log(suc);
       setAlertMsg("Successfully Registered! Please check email to confirm!");
       setOpen(true);
     } catch (error) {

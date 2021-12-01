@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { Router } from "react-router";
 import Login from "../Login/Login";
 import { Container, Typography } from "@mui/material"
-import PurchasedAuctionCard from "./components/PurchasedAuctionsCard";
-import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
+// import PurchasedAuctionCard from "./components/PurchasedAuctionsCard";
+// import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import axios from "axios";
 //get the data in here and then pass this to Card component
 
@@ -40,7 +40,7 @@ const ProfilePage = () => {
         axios.get(`http://localhost:8080/api/auction/id/${auction}`).then(res => {
           setAuctionslist((auctionslist) => auctionslist.concat(res.data));
         });
-        console.log(auctionslist);
+        // console.log(auctionslist);
       })
     }
     return () => { setAuctionslist([]) }
@@ -122,7 +122,7 @@ const ProfilePage = () => {
         sx={{
           color: '#1B5E20',
           fontFamily: 'Merriweather',
-          margin: '20px auto'
+          margin: '20px auto 10px'
         }}
         variant="h4"
         component="h2"
@@ -197,12 +197,12 @@ const ProfileCard = ({ user }) => {
 
 const epochToDate = epoch => {
   const date = new Date(epoch);
-  console.log("epoch to date", date)
+  // console.log("epoch to date", date)
   return date.toDateString()
 };
 
 const AuctionCard = ({ user, auction, index }) => {
-  console.log(`auction card ${index}`, auction);
+  // console.log(`auction card ${index}`, auction);
   return (
     <div className="card" style={{ marginTop: "10px" }}>
       <div className="card-body">
