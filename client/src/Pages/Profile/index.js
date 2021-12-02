@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Container, Typography, Paper, Box, TextField, Avatar, Button, Grid, Card, CardContent, CardMedia, CardHeader, Stack, Skeleton } from "@mui/material"
+import { Container, Typography, Paper, Box, TextField, Avatar, Button, Grid, Card, CardContent, CardMedia, CardHeader, Stack, Skeleton, Alert, CircularProgress } from "@mui/material"
 import testImg from "../../Images/wheat.jpg"
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 // import CropCard from "../../Components/CropCard"
@@ -28,35 +28,39 @@ const ProfilePage = () => {
   // }, [user]);
 
   useEffect(() => {
-    // console.log("PRFOFILE USEFFECT CALLED");
-    setLoading(true);
-    // let auctions = [];
-    user?.auctionsParticipated.forEach(async (auction) => {
-      // console.log("PROFILE AUCTIONS", auction);
-      try {
-        const res = await axios.get(`http://localhost:8080/api/auction/id/${auction}`);
-        // console.log("PROFILE AUCTIONS", res);
-        setAuctionslist((auctionslist) => ([...auctionslist, res.data]));
-      } catch (err) {
-        console.error("PROFILE AUCTIONS", err)
-      }
-    });
-    // setAuctionslist((prevAuctionslist) => [...prevAuctionslist, res.data]);
-    // console.log(auctions);
-    // setAuctionslist(auctions);
-    setLoading(false);
-    // user.auctionsParticipated.map((auction, index) => {
-    //   axios.get(`http://localhost:8080/api/auction/id/${auction}`).then(res => {
-    //     setAuctionslist((auctionslist) => auctionslist.concat(res.data));
-    //   });
-    //   // console.log(auctionslist);
-    // })
+
+    const getData = () => {
+      // let auctions = [];
+      user?.auctionsParticipated.forEach(async (auction) => {
+        // console.log("PROFILE AUCTIONS", auction);
+        setLoading(true);
+        try {
+          const res = await axios.get(`http://localhost:8080/api/auction/id/${auction}`);
+          // console.log("PROFILE AUCTIONS", res);
+          setAuctionslist((auctionslist) => ([...auctionslist, res.data]));
+        } catch (err) {
+          console.error("PROFILE AUCTIONS", err)
+        }
+        setLoading(false);
+      });
+      // setAuctionslist((prevAuctionslist) => [...prevAuctionslist, res.data]);
+      // console.log(auctions);
+      // setAuctionslist(auctions);
+      // user.auctionsParticipated.map((auction, index) => {
+      //   axios.get(`http://localhost:8080/api/auction/id/${auction}`).then(res => {
+      //     setAuctionslist((auctionslist) => auctionslist.concat(res.data));
+      //   });
+      //   // console.log(auctionslist);
+      // })
+    };
+    getData()
     return () => {
       setAuctionslist([])
     }
   }, [user?.auctionsParticipated])
 
   // console.log(auctionslist);
+  console.log(loading);
 
   return (<Container sx={{ mt: 3 }}>
     <Typography
@@ -83,12 +87,12 @@ const ProfilePage = () => {
           src={testImg}
           sx={{ width: '130px', height: '130px', maxWidth: '100%' }}
         />
-        <label htmlFor="contained-button-file">
+        {/* <label htmlFor="contained-button-file">
           <input accept="image/*" id="contained-button-file" multiple type="file" style={{ display: 'none' }} />
           <Button variant="contained" component="span" startIcon={<PhotoCamera />} sx={{ mt: 2 }}>
             Upload
           </Button>
-        </label>
+        </label> */}
       </Box>
       {/* <Divider orientation="horizontal" /> */}
       <Box
@@ -119,21 +123,36 @@ const ProfilePage = () => {
     >
       Auctions Participated
     </Typography>
-    <Grid container alignItems="center" justifyContent="center" spacing={2} sx={{ mb: 3 }}>
-      {loading && <Stack spacing={1}>
-        <Skeleton variant="text" />
-        <Skeleton variant="circular" width={40} height={40} />
-        <Skeleton variant="rectangular" width={210} height={118} />
-      </Stack>}
+    <Grid container alignItems="center" justifyContent="center" spacing={2} sx={{ mt: 3, mb: 3 }}>
+      {loading &&
+        <>
+          <Grid item xxs={12} xs={9} sm={9} md={6} lg={4} xl={3}>
+            <Stack spacing={1}>
+              <Skeleton variant="text" />
+              <Skeleton variant="circular" width={40} height={40} />
+              <Skeleton variant="rectangular" width={210} height={118} />
+            </Stack>
+          </Grid>
+          <Grid item xxs={12} xs={9} sm={9} md={6} lg={4} xl={3}>
+            <Stack spacing={1}>
+              <Skeleton variant="text" />
+              <Skeleton variant="circular" width={40} height={40} />
+              <Skeleton variant="rectangular" width={210} height={118} />
+            </Stack>
+          </Grid>
+        </>
+      }
       {!loading && user.auctionsParticipated.length === 0 ?
-        <div className="alert alert-info" role="alert">
-          You have not participated in any auction yet.
-        </div>
+        <Alert severity="info">You have not participated in any auction yet.</Alert>
         :
         auctionslist.map((auction, index) => {
           return <AuctionCard key={index} auction={auction} index={index} />
         })
       }
+
+      {/* <Box sx={{ width: '100%' }}>
+          <CircularProgress />
+        </Box> */}
     </Grid>
     {/* </div> */}
     {/* </div> */}

@@ -20,6 +20,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import axios from "axios";
 import { Snackbar, Alert } from "@mui/material"
 // import { useHistory } from 'react-router-dom';
+import { LinearProgress } from '@mui/material';
 
 function Copyright(props) {
   return (
@@ -54,11 +55,13 @@ const SignupPage = () => {
   const [alertMsg, setAlertMsg] = useState("");
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // let history = useHistory();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     setError(false);
     setErrorMsg('');
     setAlertMsg('');
@@ -93,6 +96,7 @@ const SignupPage = () => {
     setConfirmPassword('');
     setRole('farmer');
     setAgree(true);
+    setLoading(false);
   };
 
   return (
@@ -139,6 +143,9 @@ const SignupPage = () => {
           alignItems: 'center',
         }}
       >
+        {loading && <Box sx={{ width: '100%' }}>
+          <LinearProgress color="secondary" />
+        </Box>}
         <Link to="/" style={{ display: 'flex' }} component={RouterLink}>
           <HomeIcon />
           Go to Home Page

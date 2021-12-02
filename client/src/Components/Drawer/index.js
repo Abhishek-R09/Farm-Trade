@@ -99,7 +99,7 @@ const ResponsiveDrawer = (props) => {
 
   const drawer = user && (
     <>
-      <Toolbar sx={{ minHeight: '64px' }} />
+      <Toolbar sx={{ minHeight: '64px !important' }} />
       <Divider />
       {/* <Card> */}
       <CardHeader avatar={<Avatar>{`${user.firstName[0]}${user.lastName[0]}`}</Avatar>} title={`${user.firstName} ${user.lastName}`} subheader={role} titleTypographyProps={{ component: 'title', variant: 'body1' }} />

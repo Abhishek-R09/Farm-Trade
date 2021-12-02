@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Typography, Container, FormControl, Select, InputLabel, TextField, MenuItem, Button, Box, Grid } from "@mui/material"
+import { Typography, Container, FormControl, Select, InputLabel, TextField, MenuItem, Button, Box, Grid, Alert, Snackbar, InputAdornment, CircularProgress } from "@mui/material"
 // import { RaisedButton, TextField } from "material-ui";
 // import { MuiThemeProvider } from "material-ui/styles";
 import axios from "axios";
@@ -12,6 +12,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 // import { DateTimePicker, DesktopDatePicker, MobileDatePicker } from '@mui/lab';
 // import { getThemeProps } from "@mui/system";
+import { useHistory } from 'react-router-dom';
 
 // create a functional component for following class based component
 // it should return a form with following fields: 
@@ -30,23 +31,28 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 
 const FarmerForm = (props) => {
-  // const { user, username } = props
+  const { user, username } = props
   const accessToken = JSON.parse(localStorage.getItem("profile")).accessToken
 
   const [alertMsg, setAlertMsg] = useState("")
   const [open, setOpen] = useState(false)
+  const [error, setError] = useState(false)
   const [cropsList, setCropsList] = useState([])
 
-  const [startDate, setStartDate] = useState(new Date().toLocaleDateString() + new Date().toLocaleTimeString())
+  const [startDate, setStartDate] = useState(null)
   const [hour, setHour] = useState(0)
   const [minutes, setMinutes] = useState(0)
   // const [seconds, setSeconds] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [harvestDate, setHarvestDate] = useState(new Date().toLocaleDateString())
+  const [harvestDate, setHarvestDate] = useState(null)
   const [quantity, setQuantity] = useState(0)
   const [description, setDescription] = useState("")
   const [startPrice, setStartPrice] = useState(0)
   const [selectedCrop, setSelectedCrop] = useState("")
+
+  const [loading, setLoading] = useState(false)
+
+  const history = useHistory()
 
   // const [state, setState] = useState({
   //   alertmsg: "",
@@ -110,30 +116,36 @@ const FarmerForm = (props) => {
 
   useEffect(() => {
     // console.log("in component did mount user is", username);
-    axios.get(
-      `http://localhost:8080/api/farmer/getcrop/${props.username}`,
-      {
-        headers: {
-          "x-access-token": accessToken,
-        },
-      }
-    ).then((response) => {
-      // console.log(response.data);
-      let cropslist = response.data.crops.map(function (crop) {
-        let x = {};
-        x.name = crop.name;
-        x.rating = crop.rating;
-        x.id = crop._id;
-        return x;
-      })
-      // setState(prevState => ({ ...prevState, cropslist: cropslist }));
-      setCropsList(cropslist)
-      // console.log(cropslist);
-      // console.log(state.cropslist);
-    }).catch((error) => {
-      //reload page
-      console.log("FARMER FORM FETCH CROPS ERROR", error);
-    });
+    const getCrops = async () => {
+      setLoading(true)
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/farmer/getcrop/${props.username}`,
+          {
+            headers: {
+              "x-access-token": accessToken,
+            },
+          }
+        )
+        console.log(response.data);
+        let cropslist = response.data.crops.map(function (crop) {
+          let x = {};
+          x.name = crop.name;
+          x.rating = crop.rating;
+          x.id = crop._id;
+          return x;
+        })
+        // setState(prevState => ({ ...prevState, cropslist: cropslist }));
+        setCropsList(cropslist)
+        // console.log(cropslist);
+        // console.log(state.cropslist);
+      } catch (error) {
+        //reload page
+        console.log("FARMER FORM FETCH CROPS ERROR", error);
+      };
+      setLoading(false)
+    }
+    getCrops()
   }, [])
 
   // var handleDateValues;
@@ -144,51 +156,59 @@ const FarmerForm = (props) => {
 
   // if state.alertmsg is updated, then the alert will be shown
   // if state.alertmsg is not updated, then the alert will be hidden
-  useEffect(() => {
-    if (alertMsg !== "") {
-      alert(alertMsg);
-      setAlertMsg("")
-    }
-  }, [alertMsg])
+  // useEffect(() => {
+  //   if (alertMsg !== "") {
+  //     alert(alertMsg);
+  //     setAlertMsg("")
+  //   }
+  // }, [alertMsg])
 
   const handleSubmit = async (e) => {
     // check if any of the fields are empty
     // if any of the fields are empty, show an alert message
     // if all the fields are filled, submit the form
+    setLoading(true);
 
     if (selectedCrop === "") {
       setAlertMsg("Please select a crop")
       setOpen(true)
+      setError(true)
       // setState({ alertmsg: "Please select a crop" });
       // setState({ open: true });
-    } else if (startDate === "") {
+    } else if (startDate === null) {
       setAlertMsg("Please select a crop")
       setOpen(true)
+      setError(true)
       // setState({ alertmsg: "Please select a start date" });
       // setState({ open: true });
-    } else if (duration === "") {
+    } else if (duration <= 0) {
       setAlertMsg("Please select a duration")
       setOpen(true)
+      setError(true)
       // setState({ alertmsg: "Please select a duration" });
       // setState({ open: true });
-    } else if (harvestDate === "") {
+    } else if (harvestDate === null) {
       setAlertMsg("Please select a harvest date")
       setOpen(true)
+      setError(true)
       // setState({ alertmsg: "Please select a harvest date" });
       // setState({ open: true });
-    } else if (quantity === "") {
-      setAlertMsg("Please enter a quantity")
+    } else if (quantity === 0) {
+      setAlertMsg("Please enter a valid quantity")
       setOpen(true)
+      setError(true)
       // setState({ alertmsg: "Please enter a quantity" });
       // setState({ open: true });
     } else if (description === "") {
       setAlertMsg("Please enter a description")
       setOpen(true)
+      setError(true)
       // setState({ alertmsg: "Please enter a description" });
       // setState({ open: true });
-    } else if (startPrice === "") {
-      setAlertMsg("Please enter a start price")
+    } else if (startPrice <= 0) {
+      setAlertMsg("Please enter a valid start price")
       setOpen(true)
+      setError(true)
       // setState({ alertmsg: "Please enter a start price" });
       // setState({ open: true });
     } else {
@@ -209,21 +229,40 @@ const FarmerForm = (props) => {
               "x-access-token": accessToken,
             },
           });
-        console.log(suc);
-        setAlertMsg("Auction created successfully")
+        // console.log(suc);
+        // setAlertMsg("Auction created successfully")
+        // setOpen(true)
+        setError(false)
         // setState({ alertmsg: "Auction created successfully" });
         // console.log("Auction Successfully Registered");
+        setSelectedCrop("")
+        setStartDate(null)
+        setHour(0)
+        setMinutes(0)
+        setDescription("")
+        setHarvestDate(null)
+        setQuantity(0)
+        setStartPrice(0)
+        history.push('/auction', {
+          msg: 'Auction created successfully!'
+        })
       } catch (error) {
-        setAlertMsg("Auction not created")
         // setState({ alertmsg: "Auction not created" });
-        console.log(error.response?.data.message);
+        // console.log(error.response?.data.message);
+        setAlertMsg(`Auction not created! - ${error.response?.data.message}`)
+        setOpen(true)
+        setError(true)
       }
     }
-    setOpen(true);
+    // setOpen(true);
+    setLoading(false);
   };
 
 
   const submit = (e) => {
+    setAlertMsg('')
+    setOpen(false)
+    setError(false)
     // console.debug(states);
     // check if start date is in past. or harvest date is in future
     // if so, return with error 
@@ -234,9 +273,11 @@ const FarmerForm = (props) => {
     if (new Date(startDate) < new Date()) {
       setAlertMsg("Start date cannot be in the past");
       setOpen(true);
+      setError(true)
     } else if (new Date(harvestDate) > new Date()) {
       setAlertMsg("Harvest date cannot be in the future");
       setOpen(true);
+      setError(true)
       // setState(prevState => ({ ...prevState, alertmsg: "Harvest date cannot be in the future", open: true }));
       // setState(prevState => ({ ...prevState, open: true }));
     } else {
@@ -279,6 +320,7 @@ const FarmerForm = (props) => {
                 label="Crop"
                 onChange={(e) => setSelectedCrop(e.target.value)}
               >
+                {loading && <MenuItem><CircularProgress /></MenuItem>}
                 {cropsList.map((crop) => (
                   <MenuItem value={crop.id} key={crop.id}>{crop.name}</MenuItem>
                 ))}
@@ -313,7 +355,7 @@ const FarmerForm = (props) => {
                 sx={{ width: { xxs: '100%', md: '50%' }, mt: { xxs: 1 }, mb: { xxs: 1 } }}
                 InputLabelProps={{
                   shrink: true,
-                  min: new Date().toISOString().slice(0, 16),
+                  min: new Date(new Date() - new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -8),
                 }}
               />
               {/* <DateTimePicker
@@ -333,6 +375,9 @@ const FarmerForm = (props) => {
               label="Auction Hours"
               value={hour}
               sx={{ width: { xxs: '100%', xs: '49%', md: '20%' }, mt: { xxs: 1 }, mb: { xxs: 1 } }}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">Hrs.</InputAdornment>,
+              }}
               onChange={(e) => {
                 setHour(e.target.value)
                 setDuration(parseInt(e.target.value) * 60 + parseInt(minutes))
@@ -346,6 +391,9 @@ const FarmerForm = (props) => {
               min="0"
               max="59"
               sx={{ width: { xxs: '100%', xs: '49%', md: '20%' }, mt: { xxs: 1 }, mb: { xxs: 1 } }}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">Min.</InputAdornment>,
+              }}
               onChange={(e) => {
                 setMinutes(e.target.value)
                 setDuration(parseInt(hour) * 60 + parseInt(e.target.value))
@@ -393,26 +441,9 @@ const FarmerForm = (props) => {
                 value={harvestDate}
                 InputLabelProps={{
                   shrink: true,
-                  max: new Date().toISOString().slice(0, 10),
+                  max: new Date().toISOString().split("T")[0],
                 }}
               />
-              {/* </Stack> */}
-              {/* <DesktopDatePicker
-                label="Harvest Date"
-                // inputFormat="dd/mm/yyyy"
-                value={harvestDate}
-                onChange={(newVal) => setHarvestDate(newVal)}
-                renderInput={(params) => <TextField {...params} />}
-                sx={{ display: { xxs: 'none', sm: 'inline-flex' } }} 
-              />*/}
-              {/* <MobileDatePicker
-                label="Date mobile"
-                // inputFormat="dd/mm/yyyy"
-                value={harvestDate}
-                onChange={(e) => setHarvestDate(e.target.value)}
-                renderInput={(params) => <TextField {...params} />}
-                sx={{ display: { sm: 'none' } }}
-              /> */}
             </LocalizationProvider>
             <TextField
               type="number"
@@ -420,6 +451,9 @@ const FarmerForm = (props) => {
               label="Quantity"
               value={quantity}
               sx={{ width: { xxs: '100%', xs: '49%', md: '20%' }, mt: { xxs: 1 }, mb: { xxs: 1 } }}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
+              }}
               onChange={(e) => setQuantity(e.target.value)}
             />
             <TextField
@@ -427,36 +461,42 @@ const FarmerForm = (props) => {
               className="form-control"
               label="Start Price"
               value={startPrice}
+              InputProps={{
+                startAdornment: <InputAdornment position="start">&#8377;</InputAdornment>,
+              }}
               sx={{ width: { xxs: '100%', xs: '49%', md: '20%' }, mt: { xxs: 1 }, mb: { xxs: 1 } }}
               onChange={(e) => setStartPrice(e.target.value)}
             />
           </Grid>
-          {/* </div> */}
-          {/* <div className="form-group p-2 "> */}
-          {/* <label>Quantity</label> */}
-          {/* <Grid item xxs={12}>
-          </Grid> */}
-          {/* </div> */}
-          {/* <div className="form-group p-2 "> */}
-          {/* <label>Description</label> */}
-          {/* </div> */}
-          {/* <div className="form-group p-2 "> */}
-          {/* <label>Start Price</label> */}
-          {/* <Grid item xxs={12}>
-          </Grid> */}
-          {/* </div> */}
-          {/* end form here */}
           <Grid item xxs={12}>
             <Button
               variant="contained"
               onClick={submit}
             >
               Submit
+              {loading && <CircularProgress />}
             </Button>
           </Grid>
         </Grid>
       </Box>
-    </Container >
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={() => {
+          setOpen(prev => !prev)
+          setAlertMsg("")
+          setError(false)
+        }}
+      >
+        <Alert onClose={() => {
+          setOpen(prev => !prev)
+          setAlertMsg("")
+          setError(false)
+        }} severity={error ? "error" : "success"} sx={{ width: '100%' }}>
+          {alertMsg}
+        </Alert>
+      </Snackbar>
+    </Container>
   );
   // }
 };

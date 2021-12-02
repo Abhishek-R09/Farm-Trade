@@ -20,7 +20,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import axios from "axios";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { InputAdornment, IconButton, Snackbar, Alert } from '@mui/material';
+import { InputAdornment, IconButton, Snackbar, Alert, LinearProgress } from '@mui/material';
 
 
 function Copyright(props) {
@@ -48,6 +48,7 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
   const [errorMsg, setErrorMsg] = useState('');
   // const [role, setRole] = useState('Farmer');
   // const [remember, setRemember] = useState(false);
+  const [loading, setLoading] = useState(false);
   let history = useHistory();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -55,6 +56,7 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
 
 
   const handleSubmit = async (event) => {
+    setLoading(true);
     setError(false);
     setErrorMsg('');
     event.preventDefault();
@@ -84,6 +86,7 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
     }
     setUsername('');
     setPassword('');
+    setLoading(false);
   };
 
   return (
@@ -119,6 +122,9 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
           alignItems: 'center',
         }}
       >
+        {loading && <Box sx={{ width: '100%' }}>
+          <LinearProgress color="secondary" />
+        </Box>}
         <Link to="/" style={{ display: 'flex' }} component={RouterLink}>
           <HomeIcon />
           Go to Home Page
@@ -205,6 +211,7 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
           >
             Sign In
           </Button>
+
           <Grid container>
             {/* <Grid item xs>
               <Link href="#" variant="body2">
