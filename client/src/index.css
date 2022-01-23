@@ -18,3 +18,22 @@ code {
 .MuiTextField-root {
   max-width: 100%;
 }
+
+.mainpageImg {
+  width: 100%;
+  min-height: 100vh;
+  max-height: 100vh;
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  object-fit: cover;
+  object-position: right;
+}
+
+.mainpageImg img {
+  width: 100%;
+  min-height: 100vh;
+  max-height: 100vh;
+  object-fit: cover;
+  object-position: right;
+}

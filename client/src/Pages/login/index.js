@@ -15,7 +15,8 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router'
 import HomeIcon from '@mui/icons-material/Home';
 import axios from "axios";
 import Visibility from '@mui/icons-material/Visibility';
@@ -32,7 +33,7 @@ function Copyright(props) {
       {...props}
     >
       {'Copyright © '}
-      <Link color="inherit" component={RouterLink} to="/">
+      <Link color="inherit" component={NextLink} href="/">
         FarmTrade.com
       </Link>{' '}
       {new Date().getFullYear()}
@@ -49,7 +50,8 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
   // const [role, setRole] = useState('Farmer');
   // const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
-  let history = useHistory();
+  // let history = useHistory();
+  const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
@@ -76,7 +78,8 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
       setUser(JSON.parse(localStorage.getItem("profile")).accessToken);
       updateUsername(JSON.parse(localStorage.getItem("profile")).username);
       // console.log("try success");
-      history.push("/profile");
+
+      router.push("/profile");
     } catch (error) {
       console.log(error);
       console.log(error.response?.data.message);
@@ -125,10 +128,12 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
         {loading && <Box sx={{ width: '100%' }}>
           <LinearProgress color="secondary" />
         </Box>}
-        <Link to="/" style={{ display: 'flex' }} component={RouterLink}>
-          <HomeIcon />
-          Go to Home Page
-        </Link>
+        <NextLink href="/" passHref>
+          <Link style={{ display: 'flex' }} component="a">
+            <HomeIcon />
+            Go to Home Page
+          </Link>
+        </NextLink>
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -219,9 +224,11 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
               </Link>
             </Grid> */}
             <Grid item>
-              <Link to="/signup" component={RouterLink} variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <NextLink href="/signup" passHref>
+                <Link variant="body2" component="a">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </NextLink>
             </Grid>
           </Grid>
         </Box>

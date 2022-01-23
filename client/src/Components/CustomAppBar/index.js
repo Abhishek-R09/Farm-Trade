@@ -11,7 +11,9 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+// import { Link, useLocation, useHistory } from 'react-router-dom';
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 // import HomeIcon from '@mui/icons-material/Home';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Logout from '@mui/icons-material/Logout';
@@ -25,11 +27,13 @@ export default function MenuAppBar(props) {
   // eslint-disable-next-line no-unused-vars
   // const auth = React.useContext(AuthContext)
   const { setUser } = props;
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const user = JSON.parse(localStorage.getItem("profile"));
+  // const user = JSON.parse(localStorage.getItem("profile"));
+  const user = null;
 
-  const location = useLocation();
-  let history = useHistory();
+  // const location = useLocation();
+  // let history = useHistory();
 
   // if (location.pathname === '/login' || location.pathname === '/signup') {
   //   return <></>;
@@ -60,7 +64,7 @@ export default function MenuAppBar(props) {
           zIndex: (theme) => theme.zIndex.drawer + 1
         }}>
         <Toolbar>
-          {!(location.pathname === '/') && user && <IconButton
+          {!(router.pathname === '/') && user && <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
@@ -70,19 +74,20 @@ export default function MenuAppBar(props) {
             <MenuIcon />
           </IconButton>}
           <div style={{ flexGrow: 1 }}>
-            <Typography
-              variant="h5"
-              component={Link}
-              to="/"
-              sx={{ flexGrow: 1, textDecoration: 'none', color: 'text.primary' }}
-            >
-              FarmTrade
-            </Typography>
+            <Link href="/" passHref>
+              <Typography
+                variant="h5"
+                component="a"
+                sx={{ flexGrow: 1, textDecoration: 'none', color: 'text.primary' }}
+              >
+                FarmTrade
+              </Typography>
+            </Link>
           </div>
-          {location.pathname === '/' && user && <Button
+          {router.pathname === '/' && user && <Button
             sx={{ marginRight: '10px', display: { xxs: 'none', xs: 'inline-flex' } }}
             component={Link}
-            to="/auction"
+            href="/auction"
             variant="contained"
             color="secondary"
             startIcon={<ShoppingCartIcon />}
@@ -157,14 +162,14 @@ export default function MenuAppBar(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem component={Link} to="/profile" onClick={handleClose}>
+                <MenuItem component={Link} href="/profile" onClick={handleClose}>
                   <ListItemIcon>
                     <AccountCircle fontSize="small" />
                   </ListItemIcon>
                   Profile
                 </MenuItem>
                 {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
-                <MenuItem sx={{ display: { xxs: 'flex', sm: 'none' } }} component={Link} to="/auction" onClick={handleClose}>
+                <MenuItem sx={{ display: { xxs: 'flex', sm: 'none' } }} component={Link} href="/auction" onClick={handleClose}>
                   <ListItemIcon>
                     <ShoppingCartIcon fontSize="small" />
                   </ListItemIcon>
@@ -233,18 +238,26 @@ export default function MenuAppBar(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem component={Link} to="/login" onClick={handleClose}>
-                  <ListItemIcon>
-                    <AccountCircle fontSize="small" />
-                  </ListItemIcon>
-                  Login
-                </MenuItem>
-                <MenuItem component={Link} to="/signup" onClick={handleClose}>
-                  <ListItemIcon>
-                    <AccountCircle fontSize="small" />
-                  </ListItemIcon>
-                  Signup
-                </MenuItem>
+                <Link href="/login">
+                  <MenuItem component="a" onClick={handleClose}>
+                    {/* <a> */}
+                    <ListItemIcon>
+                      <AccountCircle fontSize="small" />
+                    </ListItemIcon>
+                    Login
+                    {/* </a> */}
+                  </MenuItem>
+                </Link>
+                <Link href="/signup">
+                  <MenuItem component="a" onClick={handleClose}>
+                    {/* <a> */}
+                    <ListItemIcon>
+                      <AccountCircle fontSize="small" />
+                    </ListItemIcon>
+                    Signup
+                    {/* </a> */}
+                  </MenuItem>
+                </Link>
               </Menu>
             </>
           </>

@@ -21,13 +21,15 @@ import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import Toolbar from '@mui/material/Toolbar';
 // import Typography from '@mui/material/Typography';
 import MenuAppBar from '../CustomAppBar';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+// import { Link, useLocation, useHistory } from 'react-router-dom';
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { Avatar, Button, CardActions, CardHeader, ListItemButton } from '@mui/material';
 
 const drawerWidth = 240;
 
 const ResponsiveDrawer = (props) => {
-  let history = useHistory();
+  // let history = useHistory();
 
   const drawerLinks = [
     {
@@ -84,7 +86,8 @@ const ResponsiveDrawer = (props) => {
   ]
   const { window, setUser } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const user = JSON.parse(localStorage.getItem("profile"));
+  // const user = JSON.parse(localStorage.getItem("profile"));
+  const user = null;
   const role = user?.roles[0];
 
   const handleDrawerToggle = () => {
@@ -94,7 +97,7 @@ const ResponsiveDrawer = (props) => {
   const logout = () => {
     localStorage.clear();
     setUser(null);
-    history.push("/");
+    // history.push("/");
   };
 
   const drawer = user && (
@@ -110,7 +113,7 @@ const ResponsiveDrawer = (props) => {
       <Divider />
       <List>
         {drawerLinks.map((link, index) => (
-          <ListItemButton component={Link} to={link.link} key={link.link} >
+          <ListItemButton component={Link} href={link.link} key={link.link} >
             <ListItemIcon>
               {link.icon}
             </ListItemIcon>
@@ -121,7 +124,7 @@ const ResponsiveDrawer = (props) => {
       <Divider />
       <List>
         {role === "farmer" && farmerLinks.map((link, index) => (
-          <ListItemButton component={Link} to={link.link} key={link.link} >
+          <ListItemButton component={Link} href={link.link} key={link.link} >
             <ListItemIcon>
               {link.icon}
             </ListItemIcon>
@@ -129,7 +132,7 @@ const ResponsiveDrawer = (props) => {
           </ListItemButton>
         ))}
         {role === "admin" && adminLinks.map((link, index) => (
-          <ListItemButton component={Link} to={link.link} key={link.link} >
+          <ListItemButton component={Link} href={link.link} key={link.link} >
             <ListItemIcon>
               {link.icon}
             </ListItemIcon>
@@ -143,7 +146,8 @@ const ResponsiveDrawer = (props) => {
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
-  const location = useLocation();
+  // const location = useLocation();
+  const router = useRouter();
 
   // if (location.pathname === '/') {
   //   return <></>;
@@ -154,7 +158,7 @@ const ResponsiveDrawer = (props) => {
     <>
       <CssBaseline />
       <MenuAppBar handleDrawerToggle={handleDrawerToggle} setUser={setUser} />
-      {!(['/', '/login', '/signup'].includes(location.pathname)) && user && <Box
+      {!(['/', '/login', '/signup'].includes(router.pathname)) && user && <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"

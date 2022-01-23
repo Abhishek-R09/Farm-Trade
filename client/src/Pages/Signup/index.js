@@ -15,7 +15,9 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Link as RouterLink } from 'react-router-dom';
+// import { Link as RouterLink } from 'react-router-dom';
+import NextLink from 'next/link';
+// import { useRouter } from 'next/router'
 import HomeIcon from '@mui/icons-material/Home';
 import axios from "axios";
 import { Snackbar, Alert } from "@mui/material"
@@ -31,7 +33,7 @@ function Copyright(props) {
       {...props}
     >
       {'Copyright © '}
-      <Link color="inherit" component={RouterLink} to="/">
+      <Link color="inherit" component={NextLink} href="/">
         FarmTrade.com
       </Link>{' '}
       {new Date().getFullYear()}
@@ -146,10 +148,12 @@ const SignupPage = () => {
         {loading && <Box sx={{ width: '100%' }}>
           <LinearProgress color="secondary" />
         </Box>}
-        <Link to="/" style={{ display: 'flex' }} component={RouterLink}>
-          <HomeIcon />
-          Go to Home Page
-        </Link>
+        <NextLink href="/" passHref>
+          <Link style={{ display: 'flex' }} component="a">
+            <HomeIcon />
+            Go to Home Page
+          </Link>
+        </NextLink>
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -279,9 +283,11 @@ const SignupPage = () => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link to="/login" component={RouterLink} variant="body2">
-                Already have an account? Sign in
-              </Link>
+              <NextLink href="/login" passHref>
+                <Link component="a" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </NextLink>
             </Grid>
           </Grid>
         </Box>

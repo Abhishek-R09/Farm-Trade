@@ -2,8 +2,8 @@ import { useState } from 'react'
 import './index.css'
 import { Switch, Route, useLocation, Link } from 'react-router-dom'
 import HomePage from './Pages/Home';
-import SignInPage from './Pages/Signin';
-import SignupPage from './Pages/Signup';
+import SignInPage from './pages/login';
+import SignupPage from './pages/signup';
 // import Login from './Pages/Login/Login'
 import Auction from './Pages/Auction/Auction'
 // import Dashboard from './Pages/Dashboard/Dashboard'
