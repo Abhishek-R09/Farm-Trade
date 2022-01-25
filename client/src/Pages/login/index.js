@@ -1,14 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import InputLabel from '@mui/material/InputLabel';
-// import MenuItem from '@mui/material/MenuItem';
-// import FormControl from '@mui/material/FormControl';
-// import Select from '@mui/material/Select';
-// import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -23,6 +17,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { InputAdornment, IconButton, Snackbar, Alert, LinearProgress } from '@mui/material';
 
+import { getCsrfToken, getSession, signIn, useSession } from 'next-auth/react'
 
 function Copyright(props) {
   return (
@@ -33,16 +28,19 @@ function Copyright(props) {
       {...props}
     >
       {'Copyright © '}
-      <Link color="inherit" component={NextLink} href="/">
-        FarmTrade.com
-      </Link>{' '}
+      <NextLink href="/">
+        <Link color="inherit" component="a">
+          FarmTrade.com
+        </Link>
+      </NextLink>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
 }
 
-const SignInPage = ({ setUser, setUsername: updateUsername }) => {
+const SignInPage = ({ setUser, setUsername: updateUsername, csrfToken }) => {
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
@@ -50,12 +48,12 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
   // const [role, setRole] = useState('Farmer');
   // const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
-  // let history = useHistory();
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
 
+  const firstInputRef = useRef()
 
   const handleSubmit = async (event) => {
     setLoading(true);
@@ -72,22 +70,44 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
     // setRole('Farmer');
     // setRemember(false);
     try {
-      const suc = await axios.post("http://localhost:8080/api/auth/signin", values);
+      // const suc = await axios.post("http://localhost:8080/api/auth/signin", values);
       // console.log(suc);
-      localStorage.setItem("profile", JSON.stringify(suc?.data));
-      setUser(JSON.parse(localStorage.getItem("profile")).accessToken);
-      updateUsername(JSON.parse(localStorage.getItem("profile")).username);
+      // localStorage.setItem("profile", JSON.stringify(suc?.data));
+      // setUser(JSON.parse(localStorage.getItem("profile")).accessToken);
+      // updateUsername(JSON.parse(localStorage.getItem("profile")).username);
       // console.log("try success");
+      const data = await signIn("credentials", { redirect: false, username, password })
 
-      router.push("/profile");
+      console.log(data);
+
+      if (data.error) {
+        console.log(data.error);
+        let errorMsg = "";
+        switch (data.error) {
+          case 'CredentialsSignin':
+            errorMsg = "Invalid Credentials!";
+            break;
+          default:
+            errorMsg = "Something went wrong!";
+            break;
+        }
+        setError(true);
+        setErrorMsg(errorMsg);
+      }
+
+      if (data.ok && data.status == 200) {
+        router.push("/testprotected");
+      }
+
     } catch (error) {
-      console.log(error);
-      console.log(error.response?.data.message);
+      // console.log(error);
+      // console.log(error.response?.data.message);
       console.log("catch fail");
       setError(true);
-      setErrorMsg(error.response?.data.message || "Something went wrong!");
+      setErrorMsg("Something went wrong!");
     }
-    setUsername('');
+    // setUsername('');
+    firstInputRef.current.focus()
     setPassword('');
     setLoading(false);
   };
@@ -141,9 +161,11 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
           Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          {/* <input name="csrfToken" type="hidden" defaultValue={csrfToken} /> */}
           <Grid container spacing={2}>
             <Grid item xxs={12}>
               <TextField
+                inputRef={firstInputRef}
                 required
                 fullWidth
                 id="username"
@@ -165,6 +187,7 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 type={showPassword ? "text" : "password"}
                 id="password"
+                autoComplete='current-password'
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -237,5 +260,26 @@ const SignInPage = ({ setUser, setUsername: updateUsername }) => {
     </Container>
   );
 };
+
+export async function getServerSideProps(context) {
+  const { req, res } = context
+  const session = await getSession({ req })
+
+  // console.log(session);
+  if (session) {
+    return {
+      redirect: {
+        destination: '/testprotected',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {
+      csrfToken: await getCsrfToken(context)
+    }
+  }
+}
 
 export default SignInPage;

@@ -30,6 +30,10 @@ code {
   object-position: right;
 }
 
+.mainpageImg > span {
+  width: 100% !important;
+}
+
 .mainpageImg img {
   width: 100%;
   min-height: 100vh;

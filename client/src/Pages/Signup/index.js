@@ -15,14 +15,13 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-// import { Link as RouterLink } from 'react-router-dom';
 import NextLink from 'next/link';
-// import { useRouter } from 'next/router'
 import HomeIcon from '@mui/icons-material/Home';
 import axios from "axios";
 import { Snackbar, Alert } from "@mui/material"
-// import { useHistory } from 'react-router-dom';
 import { LinearProgress } from '@mui/material';
+
+import { getCsrfToken, getSession, signIn, useSession } from 'next-auth/react'
 
 function Copyright(props) {
   return (
@@ -33,16 +32,17 @@ function Copyright(props) {
       {...props}
     >
       {'Copyright © '}
-      <Link color="inherit" component={NextLink} href="/">
-        FarmTrade.com
-      </Link>{' '}
+      <NextLink href="/">
+        <Link color="inherit" component="a">
+          FarmTrade.com
+        </Link>
+      </NextLink>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
 }
 
-// const theme = createTheme();
 
 const SignupPage = () => {
   const [firstName, setFirstName] = useState('');
@@ -59,7 +59,6 @@ const SignupPage = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // let history = useHistory();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -210,7 +209,7 @@ const SignupPage = () => {
                 onChange={(event) => setUsername(event.target.value)}
                 name="username"
                 type="text"
-              // autoComplete="username"
+                autoComplete="username"
               />
             </Grid>
             <Grid item xxs={12}>
@@ -223,7 +222,7 @@ const SignupPage = () => {
                 onChange={(event) => setPassword(event.target.value)}
                 type="password"
                 id="password"
-              // autoComplete="new-password"
+                autoComplete="new-password"
               />
             </Grid>
             <Grid item xxs={12}>
@@ -236,7 +235,7 @@ const SignupPage = () => {
                 onChange={(event) => setConfirmPassword(event.target.value)}
                 type="password"
                 id="confirm_password"
-              // autoComplete="new-password"
+                autoComplete="new-password"
               />
             </Grid>
             <Grid item xxs={12}>
@@ -296,5 +295,27 @@ const SignupPage = () => {
     </Container>
   );
 };
+
+export async function getServerSideProps(context) {
+  const { req, res } = context
+  const session = await getSession({ req })
+
+  // console.log(session);
+  if (session) {
+    return {
+      redirect: {
+        destination: '/testprotected',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {
+      csrfToken: await getCsrfToken(context)
+    }
+  }
+}
+
 
 export default SignupPage;
