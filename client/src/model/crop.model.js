@@ -6,5 +6,5 @@ const CropSchema = new mongoose.Schema({
   rating: Number,
 })
 
-module.exports = mongoose.models.Crop || mongoose.model("Crop", CropSchema);
+module.exports = mongoose.models?.Crop || mongoose.model("Crop", CropSchema);
 // module.exports = Crop;

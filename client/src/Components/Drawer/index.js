@@ -1,35 +1,31 @@
 import * as React from 'react';
-// import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
-// import IconButton from '@mui/material/IconButton';
-// import InboxIcon from '@mui/icons-material/MoveToInbox';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-// import DashboardIcon from '@mui/icons-material/Dashboard';
-// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AddIcon from '@mui/icons-material/Add';
 import List from '@mui/material/List';
-// import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import GavelIcon from '@mui/icons-material/Gavel';
 import NewReleasesIcon from '@mui/icons-material/NewReleases';
-// import MailIcon from '@mui/icons-material/Mail';
-// import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-// import Typography from '@mui/material/Typography';
 import MenuAppBar from '../CustomAppBar';
-// import { Link, useLocation, useHistory } from 'react-router-dom';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Avatar, Button, CardActions, CardHeader, ListItemButton } from '@mui/material';
 
+import { useSession, signOut } from 'next-auth/react'
+
 const drawerWidth = 240;
 
 const ResponsiveDrawer = (props) => {
-  // let history = useHistory();
+  const { data, status } = useSession()
+  const user = data?.user?.user
+  const role = user?.roles[0].name
+  const router = useRouter();
+  // console.log("drawer", status, user);
 
   const drawerLinks = [
     {
@@ -37,27 +33,12 @@ const ResponsiveDrawer = (props) => {
       link: '/profile',
       icon: <AccountCircleIcon />,
     },
-    // {
-    //   text: 'My Account',
-    //   link: '/my-account',
-    //   icon: <AccountCircleIcon />
-    // },
     {
       text: 'Auction',
       link: '/auction',
       icon: <GavelIcon />
     },
-    // {
-    //   text: 'Dashboard',
-    //   link: '/dashboard',
-    //   icon: <DashboardIcon />
 
-    // },
-    // {
-    //   text: 'Marketplace',
-    //   link: '/marketplace',
-    //   icon: <ShoppingCartIcon />
-    // }
   ]
 
   const adminLinks = [
@@ -73,99 +54,87 @@ const ResponsiveDrawer = (props) => {
     }
   ]
   const farmerLinks = [
-    // {
-    //   text: 'New Crop',
-    //   link: '/new-crop',
-    //   icon: <AddIcon />
-    // },
     {
       text: 'Create Auction',
       link: '/createauction',
       icon: <NewReleasesIcon />
     }
   ]
-  const { window, setUser } = props;
+  const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  // const user = JSON.parse(localStorage.getItem("profile"));
-  const user = null;
-  const role = user?.roles[0];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const logout = () => {
-    localStorage.clear();
-    setUser(null);
-    // history.push("/");
+  const logout = async () => {
+    const data = await signOut({ redirect: false, callbackUrl: '/login' });
+    router.push(data.url);
   };
 
-  const drawer = user && (
+  const drawer = status === "authenticated" && (
     <>
       <Toolbar sx={{ minHeight: '64px !important' }} />
       <Divider />
-      {/* <Card> */}
       <CardHeader avatar={<Avatar>{`${user.firstName[0]}${user.lastName[0]}`}</Avatar>} title={`${user.firstName} ${user.lastName}`} subheader={role} titleTypographyProps={{ component: 'title', variant: 'body1' }} />
       <CardActions>
-        {/* <Button variant="contained" sx={{ width: '100%' }}>Signout</Button> */}
       </CardActions>
-      {/* </Card> */}
       <Divider />
       <List>
         {drawerLinks.map((link, index) => (
-          <ListItemButton component={Link} href={link.link} key={link.link} >
-            <ListItemIcon>
-              {link.icon}
-            </ListItemIcon>
-            <ListItemText primary={link.text} />
-          </ListItemButton>
+          <Link href={link.link} key={link.link}>
+            <ListItemButton component="a">
+              <ListItemIcon>
+                {link.icon}
+              </ListItemIcon>
+              <ListItemText primary={link.text} />
+            </ListItemButton>
+          </Link>
         ))}
       </List>
       <Divider />
       <List>
         {role === "farmer" && farmerLinks.map((link, index) => (
-          <ListItemButton component={Link} href={link.link} key={link.link} >
-            <ListItemIcon>
-              {link.icon}
-            </ListItemIcon>
-            <ListItemText primary={link.text} />
-          </ListItemButton>
+          <Link href={link.link} key={link.link}>
+            <ListItemButton component="a">
+              <ListItemIcon>
+                {link.icon}
+              </ListItemIcon>
+              <ListItemText primary={link.text} />
+            </ListItemButton>
+          </Link>
         ))}
         {role === "admin" && adminLinks.map((link, index) => (
-          <ListItemButton component={Link} href={link.link} key={link.link} >
-            <ListItemIcon>
-              {link.icon}
-            </ListItemIcon>
-            <ListItemText primary={link.text} />
-          </ListItemButton>
+          <Link href={link.link} key={link.link}>
+            <ListItemButton component="a">
+              <ListItemIcon>
+                {link.icon}
+              </ListItemIcon>
+              <ListItemText primary={link.text} />
+            </ListItemButton>
+          </Link>
         ))}
       </List>
       <Button variant="contained" sx={{ width: '90%', m: 'auto', mb: 3 }} onClick={logout}>Signout</Button>
     </>
   );
 
-  const container = window !== undefined ? () => window().document.body : undefined;
-
-  // const location = useLocation();
-  const router = useRouter();
-
-  // if (location.pathname === '/') {
-  //   return <></>;
-  // }
+  // const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
     // <Box sx={{ display: 'flex' }}>
     <>
       <CssBaseline />
-      <MenuAppBar handleDrawerToggle={handleDrawerToggle} setUser={setUser} />
-      {!(['/', '/login', '/signup'].includes(router.pathname)) && user && <Box
+      <MenuAppBar handleDrawerToggle={handleDrawerToggle} />
+      {(!(['/', '/login', '/signup'].includes(router.pathname)) && status === "authenticated") && <Box
+        // {<Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
-          container={container}
+          // container={container}
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}

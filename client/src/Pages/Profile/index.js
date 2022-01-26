@@ -1,66 +1,82 @@
 import { useState, useEffect } from "react"
 import { Container, Typography, Paper, Box, TextField, Avatar, Button, Grid, Card, CardContent, CardMedia, CardHeader, Stack, Skeleton, Alert, CircularProgress } from "@mui/material"
-import testImg from "../../Images/wheat.jpg"
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-// import CropCard from "../../Components/CropCard"
+import testImg from "../Images/wheat.jpg"
 import axios from "axios";
-// import { withRouter } from "react-router";
-import wheatImg from "../../Images/wheat.jpg"
+import wheatImg from "../Images/wheat.jpg"
+import { useSession } from "next-auth/react"
+import Image from "next/image"
 
 const ProfilePage = () => {
-  const [user, setUser] = useState(localStorage.getItem("profile") ? JSON.parse(localStorage.getItem("profile")) : {});
+  const { data, status } = useSession()
+  const user = data?.user?.user
+  // console.log("profile", user);
+
   const [auctionslist, setAuctionslist] = useState([]);
 
-  const [firstName, setFirstName] = useState(user?.firstName || '');
-  const [lastName, setLastName] = useState(user?.lastName || '');
-  const [email, setEmail] = useState(user?.email || '');
-  const [username, setUsername] = useState(user?.username || '');
+  const [firstName, setFirstName] = useState(user?.firstName || "");
+  const [lastName, setLastName] = useState(user?.lastName || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [username, setUsername] = useState(user?.username || "");
   const [loading, setLoading] = useState(false)
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     return (
-  //       <Router>
-  //         <Login setUser={setUser} />
-  //       </Router>
-  //     );
-  //   }
-  // }, [user]);
-
   useEffect(() => {
-
-    const getData = () => {
-      // let auctions = [];
-      user?.auctionsParticipated.forEach(async (auction) => {
-        // console.log("PROFILE AUCTIONS", auction);
-        setLoading(true);
-        try {
-          const res = await axios.get(`http://localhost:8080/api/auction/id/${auction}`);
-          // console.log("PROFILE AUCTIONS", res);
-          setAuctionslist((auctionslist) => ([...auctionslist, res.data]));
-        } catch (err) {
-          console.error("PROFILE AUCTIONS", err)
-        }
-        setLoading(false);
-      });
-      // setAuctionslist((prevAuctionslist) => [...prevAuctionslist, res.data]);
-      // console.log(auctions);
-      // setAuctionslist(auctions);
-      // user.auctionsParticipated.map((auction, index) => {
-      //   axios.get(`http://localhost:8080/api/auction/id/${auction}`).then(res => {
-      //     setAuctionslist((auctionslist) => auctionslist.concat(res.data));
-      //   });
-      //   // console.log(auctionslist);
-      // })
-    };
-    getData()
-    return () => {
-      setAuctionslist([])
+    // console.log("profile useeffect user update");
+    if (user) {
+      setFirstName(user.firstName)
+      setLastName(user.lastName)
+      setEmail(user.email)
+      setUsername(user.username)
     }
-  }, [user?.auctionsParticipated])
+
+    const temp = async () => {
+      try {
+        const res = await axios.get("/api/user/getAuctions");
+        // console.log(typeof res, { ...res });
+        const data = await res.data
+        console.log(data);
+        setAuctionslist(data.auctions)
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    temp()
+  }, [user]);
+
+  // useEffect(() => {
+
+  //   const getData = () => {
+  //     // let auctions = [];
+  //     user?.auctionsParticipated.forEach(async (auction) => {
+  //       // console.log("PROFILE AUCTIONS", auction);
+  //       setLoading(true);
+  //       try {
+  //         const res = await axios.get(`http://localhost:8080/api/auction/id/${auction}`);
+  //         // console.log("PROFILE AUCTIONS", res);
+  //         setAuctionslist((auctionslist) => ([...auctionslist, res.data]));
+  //       } catch (err) {
+  //         console.error("PROFILE AUCTIONS", err)
+  //       }
+  //       setLoading(false);
+  //     });
+  //     // setAuctionslist((prevAuctionslist) => [...prevAuctionslist, res.data]);
+  //     // console.log(auctions);
+  //     // setAuctionslist(auctions);
+  //     // user.auctionsParticipated.map((auction, index) => {
+  //     //   axios.get(`http://localhost:8080/api/auction/id/${auction}`).then(res => {
+  //     //     setAuctionslist((auctionslist) => auctionslist.concat(res.data));
+  //     //   });
+  //     //   // console.log(auctionslist);
+  //     // })
+  //   };
+  //   getData()
+  //   return () => {
+  //     setAuctionslist([])
+  //   }
+  // }, [user?.auctionsParticipated])
 
   // console.log(auctionslist);
-  console.log(loading);
+  // console.log(loading);
 
   return (<Container sx={{ mt: 3 }}>
     <Typography
@@ -83,10 +99,10 @@ const ProfilePage = () => {
         sx={{ p: { xxs: 0, md: 2 }, width: { xxs: '100%', sm: '35%', md: '25%' }, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: { xxs: 'center', xs: 'space-evenly', sm: 'center' }, flexDirection: { xxs: 'column', xs: 'row', sm: 'column' } }}
       >
         <Avatar
-          alt="Remy Sharp"
-          src={testImg}
+          alt={status === "authenticated" ? `${user.firstName} ${user.lastName}` : "No image"}
+          // src={testImg}
           sx={{ width: '130px', height: '130px', maxWidth: '100%' }}
-        />
+        ><Image src={testImg} alt={status === "authenticated" ? `${user.firstName} ${user.lastName}` : "No image"} layout="fill" /></Avatar>
         {/* <label htmlFor="contained-button-file">
           <input accept="image/*" id="contained-button-file" multiple type="file" style={{ display: 'none' }} />
           <Button variant="contained" component="span" startIcon={<PhotoCamera />} sx={{ mt: 2 }}>
@@ -142,7 +158,7 @@ const ProfilePage = () => {
           </Grid>
         </>
       }
-      {!loading && user.auctionsParticipated.length === 0 ?
+      {!loading && auctionslist.length === 0 ?
         <Alert severity="info">You have not participated in any auction yet.</Alert>
         :
         auctionslist.map((auction, index) => {
@@ -161,76 +177,31 @@ const ProfilePage = () => {
 
 const epochToDate = epoch => {
   const date = new Date(epoch * 1000);
-  console.log("epoch to date", date)
+  // console.log("epoch to date", date)
   return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
 };
 
 const AuctionCard = ({ user, auction, index }) => {
-  console.log(`auction card ${index}`, auction);
+  // console.log(`auction card ${index}`, auction);
   return (
     <Grid item xxs={12} xs={9} sm={9} md={6} lg={4} xl={3}>
       <Card>
         <CardHeader
-          // avatar={
-          //   <Avatar sx={{ bgcolor: 'primary.main' }} aria-label="farmer name">
-          //     FN
-          //   </Avatar>
-          // }
           title={`Auction ${index + 1} - ${auction.crop?.name || auction.description}`}
-        // subheader="Location"
         />
-        <CardMedia
-          component="img"
-          height="194"
-          image={wheatImg}
-          alt="Paella dish"
-        />
+        <CardMedia height="194" alt="Paella dish">
+          <Image src={wheatImg} />
+        </CardMedia>
         <CardContent>
-          {/* <h3>Auction {index + 1}</h3> */}
-          {/* <p>Auction Description: {auction.description} </p> */}
           <p>Start Date: {epochToDate(Number(auction.startdate))} </p>
           <p>End Date : {epochToDate(Number(auction.startdate) + Number(auction.duration) * 60)} </p>
           <p>Duration: {`${Math.floor(Number(auction.duration) / 60)} Hours ${Number(auction.duration) % 60} Minutes`}</p>
-          {/* <p>Harvest Date : {auction.harvestdate?.split("T")[0]} </p> */}
           <p>Harvest Date : {new Date(auction.harvestdate).toLocaleDateString()} </p>
-          {/* <p>Crop : {auction.crop?.name} </p> */}
           <p>Quantity : {auction.quantity} KG</p>
           <p>Start Price : &#8377;{auction.startprice}</p>
         </CardContent>
-        {/* <CardActions sx={{ padding: '16px', justifyContent: 'space-between' }}>
-          <Button color="secondary" sx={{ textTransform: 'none', cursor: 'default', color: 'secondary.dark' }} variant="outlined">
-            Current Bid: &#8377;1000
-          </Button>
-          <Button sx={{ textTransform: 'none', color: 'primary.dark' }} variant="outlined" component={RouterLink} to="/marketplace/farmer/crop">
-            More Details
-          </Button>
-        </CardActions> */}
       </Card>
-      {/* <div className="card" style={{ marginTop: "10px" }}>
-        <div className="card-body">
-          <div className="row">
-            <div className="col-md-4">
-              <img
-                src="https://shop.jivabhumi.com/image/cache/catalog/Sonamasuri%20White%20Rice-500x350.jpeg"
-                alt="Avatar"
-                style={{ width: "100%" }}
-              />
-            </div>
-            <div className="col-md-8">
-              <h3>Auction {index + 1}</h3>
-              <p>Auction Description: {auction.description} </p>
-              <p>Start Date: {epochToDate(Number(auction.startdate))} </p>
-              <p>End Date : {epochToDate(Number(auction.startdate) + Number(auction.duration) * 60)} </p>
-              <p>Harvest Date : {auction.harvestdate?.split("T")[0]} </p>
-              <p>Crop : {auction.crop?.name} </p>
-              <p>Quantity : {auction.quantity} </p>
-              <p>Start Price : {auction.startprice}</p>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </Grid>
   );
-};
-
-export default ProfilePage
+}; 
+export default ProfilePage  

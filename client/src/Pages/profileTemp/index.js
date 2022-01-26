@@ -1,10 +1,7 @@
-// import "./App.css";
 import { useState, useEffect } from "react";
-import { Router } from "react-router";
-import Login from "../Login/Login";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react"
 import { Container, Typography } from "@mui/material"
-// import PurchasedAuctionCard from "./components/PurchasedAuctionsCard";
-// import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import axios from "axios";
 //get the data in here and then pass this to Card component
 
@@ -19,33 +16,25 @@ import axios from "axios";
 
 
 const ProfilePage = () => {
-
-  const [user, setUser] = useState(localStorage.getItem("profile") ? JSON.parse(localStorage.getItem("profile")) : {});
   const [auctionslist, setAuctionslist] = useState([]);
+  const { data, status } = useSession()
+  const user = data?.user?.user
+  console.log("profile", user);
 
-  useEffect(() => {
-    if (!user) {
-      return (
-        <Router>
-          <Login setUser={setUser} />
-        </Router>
-      );
-    }
-  }, [user]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (auctionslist.length === 0 || auctionslist === undefined) {
-      user.auctionsParticipated.map((auction, index) => {
-        axios.get(`http://localhost:8080/api/auction/id/${auction}`).then(res => {
-          setAuctionslist((auctionslist) => auctionslist.concat(res.data));
-        });
-        // console.log(auctionslist);
-      })
-    }
-    return () => { setAuctionslist([]) }
+  //   if (auctionslist.length === 0 || auctionslist === undefined) {
+  //     user.auctionsParticipated.map((auction, index) => {
+  //       axios.get(`http://localhost:8080/api/auction/id/${auction}`).then(res => {
+  //         setAuctionslist((auctionslist) => auctionslist.concat(res.data));
+  //       });
+  //       // console.log(auctionslist);
+  //     })
+  //   }
+  //   return () => { setAuctionslist([]) }
 
-  }, [])
+  // }, [])
 
 
   //   const user = {
@@ -117,7 +106,6 @@ const ProfilePage = () => {
   // 2. Auction card
   return (
     <Container maxWidth="xl" className="App">
-
       <Typography
         sx={{
           color: '#1B5E20',
@@ -132,7 +120,8 @@ const ProfilePage = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-8">
-            <ProfileCard user={user} />
+            {status === "loading" && <span>Loading...</span>}
+            {status === "authenticated" && <ProfileCard user={user} />}
           </div>
           <div className="col-md-8">
             <div className="row" style={{ marginTop: "20px" }} >
@@ -142,7 +131,8 @@ const ProfilePage = () => {
             </div>
             <div className="row">
               <div className="col-md-12">
-                {user.auctionsParticipated.length === 0 ?
+                {/* {user.auctionsParticipated.length === 0 ? */}
+                {auctionslist.length === 0 ?
                   <div className="alert alert-info" role="alert">
                     You have not participated in any auction yet.
                   </div>
@@ -161,16 +151,6 @@ const ProfilePage = () => {
   );
 };
 
-// const Header = () => {
-//   return (
-//     <div className="row">
-//       <div className="col-md-12">
-//         <h1>Profile Page</h1>
-//       </div>
-//     </div>
-//   );
-// };
-
 const ProfileCard = ({ user }) => {
   return (
     <div className="card" style={{ marginTop: "40px" }}>
@@ -187,7 +167,7 @@ const ProfileCard = ({ user }) => {
             <h3>{user.firstName} {user.lastName}</h3>
             <p>{user.email}</p>
             <p>{user.status}</p>
-            <p>{user.roles}</p>
+            <p>{user.roles[0].name}</p>
           </div>
         </div>
       </div>

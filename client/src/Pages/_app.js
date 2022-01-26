@@ -1,24 +1,28 @@
 // import App from 'next/app'
-// import { AuthContextProvider } from '../Context/auth'
 import { ThemeProvider, Box } from '@mui/material';
 import theme from '../theme'
 import { SnackbarProvider } from 'notistack';
 import ResponsiveDrawer from '../Components/Drawer';
 import { SessionProvider } from "next-auth/react"
 import '../index.css'
+import { useRouter } from "next/router"
+import { useSession } from "next-auth/react"
+
 const drawerWidth = 240;
 
 function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
+
+  const router = useRouter()
 
   return (
     // <AuthContextProvider>
     <SessionProvider session={session}>
       <ThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={3}>
-          <ResponsiveDrawer setUser={null} />
+          <ResponsiveDrawer />
           <Box
             component="main"
-            sx={{ mt: 4, pt: 4 }}
+            sx={{ width: { sm: !(['/', '/login', '/signup'].includes(router.pathname)) ? `calc(100% - ${drawerWidth}px)` : '100%' }, ml: { sm: !(['/', '/login', '/signup'].includes(router.pathname)) && `${drawerWidth}px` }, mt: 4, pt: 4 }}
           >
             <Component {...pageProps} />
           </Box>

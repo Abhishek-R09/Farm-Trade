@@ -13,6 +13,6 @@ const FarmerSchema = new mongoose.Schema({
   ],
 })
 
-module.exports = mongoose.models.Farmer || mongoose.model("Farmer", FarmerSchema);
+module.exports = mongoose.models?.Farmer || mongoose.model("Farmer", FarmerSchema);
 
 // module.exports = Farmer;

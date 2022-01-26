@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const AuctionSchema =
   new mongoose.Schema({
@@ -32,6 +32,6 @@ const AuctionSchema =
     ],
   })
 
-module.exports = mongoose.models.Auction || mongoose.model("Role", AuctionSchema);
+export default mongoose.models.Auction || mongoose.model("Auction", AuctionSchema);
 
 // module.exports = Auction;

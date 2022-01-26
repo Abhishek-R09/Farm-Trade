@@ -11,40 +11,20 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import ListItemIcon from '@mui/material/ListItemIcon';
-// import { Link, useLocation, useHistory } from 'react-router-dom';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-// import HomeIcon from '@mui/icons-material/Home';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Logout from '@mui/icons-material/Logout';
-// import LoginIcon from '@mui/icons-material/Login';
-// import PersonAddIcon from '@mui/icons-material/PersonAdd';
-// import { AuthContext } from '../../Context/auth';
-
-// const drawerWidth = 240;
 
 import { useSession, signOut } from 'next-auth/react'
 
 
 export default function MenuAppBar(props) {
-  // eslint-disable-next-line no-unused-vars
-  // const auth = React.useContext(AuthContext)
   const { data, status } = useSession()
   const user = data?.user?.user
-  // console.log("test protected", data?.user);
 
-  // const { setUser } = props;
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  // const user = JSON.parse(localStorage.getItem("profile"));
-  // const user = null;
-
-  // const location = useLocation();
-  // let history = useHistory();
-
-  // if (location.pathname === '/login' || location.pathname === '/signup') {
-  //   return <></>;
-  // }
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -57,6 +37,9 @@ export default function MenuAppBar(props) {
   const logout = () => {
     signOut({ callbackUrl: 'http://localhost:3000/login' })
   };
+
+  // console.log("appbar", data, status);
+  // console.log("appbar", router.pathname);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -92,35 +75,30 @@ export default function MenuAppBar(props) {
           </div>
           {router.pathname === '/' &&
             status === "authenticated" &&
-            <Button
-              sx={{ marginRight: '10px', display: { xxs: 'none', xs: 'inline-flex' } }}
-              component={Link}
-              href="/auction"
-              variant="contained"
-              color="secondary"
-              startIcon={<ShoppingCartIcon />}
-            >
-              Auction
-            </Button>}
-          {/*location.pathname !== '/marketplace' ? <Button
-            sx={{ marginRight: '10px' }}
-            component={Link}
-            to="/marketplace"
-            variant="contained"
-            color="secondary"
-            startIcon={<ShoppingCartIcon />}
-          >
-            Marketplace
-          </Button> : <Button
-            sx={{ marginRight: '10px' }}
-            component={Link}
-            to="/"
-            variant="contained"
-            color="secondary"
-            startIcon={<HomeIcon />}
-          >
-            Home
-          </Button>*/}
+            <>
+              <Link href="/auction">
+                <Button
+                  sx={{ marginRight: '10px', display: { xxs: 'none', xs: 'inline-flex' } }}
+                  component="a"
+                  variant="contained"
+                  color="secondary"
+                  startIcon={<ShoppingCartIcon />}
+                >
+                  Auction
+                </Button>
+              </Link>
+              <Link href="/testprotected">
+                <Button
+                  sx={{ marginRight: '10px', display: { xxs: 'none', xs: 'inline-flex' } }}
+                  component="a"
+                  variant="contained"
+                  color="secondary"
+                  startIcon={<ShoppingCartIcon />}
+                >
+                  Test
+                </Button>
+              </Link>
+            </>}
           {status === "authenticated" && (
             <>
               <IconButton
@@ -243,32 +221,23 @@ export default function MenuAppBar(props) {
                     },
                   }}
                   transformOrigin={{ horizontal: 'left', vertical: 'center' }}
-                  // anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-                  // transformOrigin={{
-                  //   vertical: 'cemter',
-                  //   horizontal: 'center',
-                  // }}
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
                   <Link href="/login">
                     <MenuItem component="a" onClick={handleClose}>
-                      {/* <a> */}
                       <ListItemIcon>
                         <AccountCircle fontSize="small" />
                       </ListItemIcon>
                       Login
-                      {/* </a> */}
                     </MenuItem>
                   </Link>
                   <Link href="/signup">
                     <MenuItem component="a" onClick={handleClose}>
-                      {/* <a> */}
                       <ListItemIcon>
                         <AccountCircle fontSize="small" />
                       </ListItemIcon>
                       Signup
-                      {/* </a> */}
                     </MenuItem>
                   </Link>
                 </Menu>

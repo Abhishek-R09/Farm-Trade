@@ -1,7 +1,14 @@
 // const mongoose = require("mongoose");
 // mongoose.Promise = global.Promise;
+const db = {};
 
-// const db = {};
+db.user = require("./user.model");
+db.role = require("./role.model");
+db.auction = require("./auction.model");
+db.buyer = require("./buyer.model");
+db.crop = require("./crop.model");
+db.farmer = require("./farmer.model");
+
 
 // db.mongoose = mongoose;
 
@@ -14,4 +21,4 @@
 
 // db.ROLES = ["farmer", "admin", "buyer"];
 
-// module.exports = db;
+module.exports = db;
