@@ -1,8 +1,8 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import dbConnect from '../../../lib/dbconnect'
-const User = require('../../../model/user.model')
-const Role = require('../../../model/role.model')
+import User from '../../../model/user.model'
+import Role from '../../../model/role.model'
 import bcrypt from 'bcryptjs'
 
 export default NextAuth({
@@ -101,23 +101,6 @@ export default NextAuth({
           console.log(err);
           return null;
         }
-
-        // });
-        // console.log(user);
-        // return user
-        // const res = await fetch("/your/endpoint", {
-        //   method: 'POST',
-        //   body: JSON.stringify(credentials),
-        //   headers: { "Content-Type": "application/json" }
-        // })
-        // const user = await res.json()
-
-        // // If no error and we have user data, return it
-        // if (res.ok && user) {
-        //   return user
-        // }
-        // // Return null if user data could not be retrieved
-        // return null
       }
     })
   ],

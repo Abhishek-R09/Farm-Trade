@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const FarmerSchema = new mongoose.Schema({
   id: {
@@ -13,6 +13,4 @@ const FarmerSchema = new mongoose.Schema({
   ],
 })
 
-module.exports = mongoose.models?.Farmer || mongoose.model("Farmer", FarmerSchema);
-
-// module.exports = Farmer;
+export default mongoose.models.Farmer || mongoose.model("Farmer", FarmerSchema);

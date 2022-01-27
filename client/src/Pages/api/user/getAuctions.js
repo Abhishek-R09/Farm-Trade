@@ -1,8 +1,6 @@
 import { getSession } from "next-auth/react"
 import { getParticipatedAuctions } from "../../../controllers/users"
 import { getauctionwithid } from "../../../controllers/auctions"
-// import dbConnect from './../../../lib/dbconnect';
-const db = require("../../../model")
 
 const handler = async (req, res) => {
   try {

@@ -6,7 +6,6 @@ import ResponsiveDrawer from '../Components/Drawer';
 import { SessionProvider } from "next-auth/react"
 import '../index.css'
 import { useRouter } from "next/router"
-import { useSession } from "next-auth/react"
 
 const drawerWidth = 240;
 
@@ -15,7 +14,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
   const router = useRouter()
 
   return (
-    // <AuthContextProvider>
     <SessionProvider session={session}>
       <ThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={3}>
@@ -29,7 +27,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
         </SnackbarProvider>
       </ThemeProvider>
     </SessionProvider>
-    // </AuthContextProvider>
   )
 }
 

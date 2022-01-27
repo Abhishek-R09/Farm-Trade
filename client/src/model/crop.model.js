@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const CropSchema = new mongoose.Schema({
   name: String,
@@ -6,5 +6,4 @@ const CropSchema = new mongoose.Schema({
   rating: Number,
 })
 
-module.exports = mongoose.models?.Crop || mongoose.model("Crop", CropSchema);
-// module.exports = Crop;
+export default mongoose.models.Crop || mongoose.model("Crop", CropSchema);

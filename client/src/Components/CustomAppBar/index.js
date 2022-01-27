@@ -34,8 +34,11 @@ export default function MenuAppBar(props) {
     setAnchorEl(null);
   };
 
-  const logout = () => {
-    signOut({ callbackUrl: 'http://localhost:3000/login' })
+  const logout = async () => {
+    handleClose()
+    const data = await signOut({ redirect: true, callbackUrl: '/login' });
+    // const data = await signOut({ redirect: false, callbackUrl: '/login' });
+    // router.push(data.url);
   };
 
   // console.log("appbar", data, status);

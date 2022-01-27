@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Container, Typography, Paper, Box, TextField, Avatar, Button, Grid, Card, CardContent, CardMedia, CardHeader, Stack, Skeleton, Alert, CircularProgress } from "@mui/material"
+import { Container, Typography, Paper, Box, TextField, Avatar, Button, Grid, Card, CardContent, CardMedia, CardHeader, Stack, Skeleton, Alert } from "@mui/material"
 import testImg from "../Images/wheat.jpg"
 import axios from "axios";
 import wheatImg from "../Images/wheat.jpg"
@@ -20,7 +20,6 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    // console.log("profile useeffect user update");
     if (user) {
       setFirstName(user.firstName)
       setLastName(user.lastName)
@@ -29,54 +28,19 @@ const ProfilePage = () => {
     }
 
     const temp = async () => {
+      setLoading(true)
       try {
         const res = await axios.get("/api/user/getAuctions");
-        // console.log(typeof res, { ...res });
         const data = await res.data
-        console.log(data);
         setAuctionslist(data.auctions)
       } catch (err) {
         console.log(err);
       }
+      setLoading(false)
     };
 
     temp()
   }, [user]);
-
-  // useEffect(() => {
-
-  //   const getData = () => {
-  //     // let auctions = [];
-  //     user?.auctionsParticipated.forEach(async (auction) => {
-  //       // console.log("PROFILE AUCTIONS", auction);
-  //       setLoading(true);
-  //       try {
-  //         const res = await axios.get(`http://localhost:8080/api/auction/id/${auction}`);
-  //         // console.log("PROFILE AUCTIONS", res);
-  //         setAuctionslist((auctionslist) => ([...auctionslist, res.data]));
-  //       } catch (err) {
-  //         console.error("PROFILE AUCTIONS", err)
-  //       }
-  //       setLoading(false);
-  //     });
-  //     // setAuctionslist((prevAuctionslist) => [...prevAuctionslist, res.data]);
-  //     // console.log(auctions);
-  //     // setAuctionslist(auctions);
-  //     // user.auctionsParticipated.map((auction, index) => {
-  //     //   axios.get(`http://localhost:8080/api/auction/id/${auction}`).then(res => {
-  //     //     setAuctionslist((auctionslist) => auctionslist.concat(res.data));
-  //     //   });
-  //     //   // console.log(auctionslist);
-  //     // })
-  //   };
-  //   getData()
-  //   return () => {
-  //     setAuctionslist([])
-  //   }
-  // }, [user?.auctionsParticipated])
-
-  // console.log(auctionslist);
-  // console.log(loading);
 
   return (<Container sx={{ mt: 3 }}>
     <Typography
@@ -110,7 +74,6 @@ const ProfilePage = () => {
           </Button>
         </label> */}
       </Box>
-      {/* <Divider orientation="horizontal" /> */}
       <Box
         component="form"
         noValidate
@@ -126,7 +89,6 @@ const ProfilePage = () => {
         </div>
       </Box>
     </Paper>
-    {/* <div className="col-md-8"> */}
     <Typography
       sx={{
         color: '#1B5E20',
@@ -165,24 +127,16 @@ const ProfilePage = () => {
           return <AuctionCard key={index} auction={auction} index={index} />
         })
       }
-
-      {/* <Box sx={{ width: '100%' }}>
-          <CircularProgress />
-        </Box> */}
     </Grid>
-    {/* </div> */}
-    {/* </div> */}
   </Container>)
 }
 
 const epochToDate = epoch => {
   const date = new Date(epoch * 1000);
-  // console.log("epoch to date", date)
   return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
 };
 
 const AuctionCard = ({ user, auction, index }) => {
-  // console.log(`auction card ${index}`, auction);
   return (
     <Grid item xxs={12} xs={9} sm={9} md={6} lg={4} xl={3}>
       <Card>
@@ -203,5 +157,5 @@ const AuctionCard = ({ user, auction, index }) => {
       </Card>
     </Grid>
   );
-}; 
+};
 export default ProfilePage  

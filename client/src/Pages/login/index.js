@@ -66,19 +66,9 @@ const SignInPage = ({ setUser, setUsername: updateUsername, csrfToken }) => {
       // role,
       // remember,
     };
-    // console.log(values);
-    // setRole('Farmer');
-    // setRemember(false);
-    try {
-      // const suc = await axios.post("http://localhost:8080/api/auth/signin", values);
-      // console.log(suc);
-      // localStorage.setItem("profile", JSON.stringify(suc?.data));
-      // setUser(JSON.parse(localStorage.getItem("profile")).accessToken);
-      // updateUsername(JSON.parse(localStorage.getItem("profile")).username);
-      // console.log("try success");
-      const data = await signIn("credentials", { redirect: false, username, password })
 
-      console.log(data);
+    try {
+      const data = await signIn("credentials", { redirect: false, username, password })
 
       if (data.error) {
         console.log(data.error);
@@ -96,12 +86,11 @@ const SignInPage = ({ setUser, setUsername: updateUsername, csrfToken }) => {
       }
 
       if (data.ok && data.status == 200) {
-        router.push("/testprotected");
+        router.push("/profile");
       }
 
     } catch (error) {
-      // console.log(error);
-      // console.log(error.response?.data.message);
+      console.log(error);
       console.log("catch fail");
       setError(true);
       setErrorMsg("Something went wrong!");

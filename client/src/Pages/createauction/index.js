@@ -1,38 +1,11 @@
 import { useState, useEffect } from "react";
 import { Typography, Container, FormControl, Select, InputLabel, TextField, MenuItem, Button, Box, Grid, Alert, Snackbar, InputAdornment, CircularProgress } from "@mui/material"
-// import { RaisedButton, TextField } from "material-ui";
-// import { MuiThemeProvider } from "material-ui/styles";
 import axios from "axios";
-// import BasicDateTimePicker from './DateTimePicker';
-// import { styles } from "@material-ui/lab/internal/pickers/PickersArrowSwitcher";
-// import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
-// import DateTimePicker from '@mui/lab/DateTimePicker';
-// import Stack from '@mui/material/Stack';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-// import { DateTimePicker, DesktopDatePicker, MobileDatePicker } from '@mui/lab';
-// import { getThemeProps } from "@mui/system";
-import { useHistory } from 'react-router-dom';
-
-// create a functional component for following class based component
-// it should return a form with following fields: 
-// crop name as a dropdown list using croplist array
-// start date and time as a react datetime picker with past datetime disabled
-// a numeric field for duration in hours and minutes using a slider
-// a date picker for the harvest date and time with future datetime disabled
-// a numeric field for quantity in kg
-// a text field for description
-// a numeric field for start price in Rs with non negative value restriction
-// a button to submit the form and a button to reset the form
-// the state would contain : 
-// crop name, start date and time, duration, harvest date and time, quantity, description, start price
-// the submit button would be disabled if any of the fields are empty or if the start date and time is in the past
-// use bootstrap for styling
-
+import { useRouter } from 'next/router';
 
 const FarmerForm = (props) => {
-  const { user, username } = props
-  const accessToken = JSON.parse(localStorage.getItem("profile")).accessToken
 
   const [alertMsg, setAlertMsg] = useState("")
   const [open, setOpen] = useState(false)
@@ -42,7 +15,6 @@ const FarmerForm = (props) => {
   const [startDate, setStartDate] = useState(null)
   const [hour, setHour] = useState(0)
   const [minutes, setMinutes] = useState(0)
-  // const [seconds, setSeconds] = useState(0)
   const [duration, setDuration] = useState(0)
   const [harvestDate, setHarvestDate] = useState(null)
   const [quantity, setQuantity] = useState(0)
@@ -52,116 +24,34 @@ const FarmerForm = (props) => {
 
   const [loading, setLoading] = useState(false)
 
-  const history = useHistory()
-
-  // const [state, setState] = useState({
-  //   alertmsg: "",
-  //   open: false,
-  //   cropslist: [],
-  // })
-
-  // const [states, setStates] = useState({
-  //   startdate: new Date(),
-  //   // startdateday: 0,
-  //   // startdatemonth: 0,
-  //   // startdateyear: 0,
-  //   // startdatehour: 0,
-  //   // startdateminute: 0,
-  //   // startdatesecond: 0,
-  //   // startdate: 0,
-  //   durationhour: 0,
-  //   durationminute: 0,
-  //   durationsecond: 0,
-  //   duration: 0,
-  //   harvestdate: 0,
-  //   quantity: 0,
-  //   description: 0,
-  //   startprice: 0,
-  //   selectedcrop: ""
-  // })
-  // constructor(props) {
-  // super(props);
-  // state = {
-  //   alertmsg: "",
-  //   open: false,
-  //   cropslist: [],
-  // };
-
-  // states = {
-  //   startdate: new Date(),
-  //   // startdateday: 0,
-  //   // startdatemonth: 0,
-  //   // startdateyear: 0,
-  //   // startdatehour: 0,
-  //   // startdateminute: 0,
-  //   // startdatesecond: 0,
-  //   // startdate: 0,
-  //   durationhour: 0,
-  //   durationminute: 0,
-  //   durationsecond: 0,
-  //   duration: 0,
-  //   harvestdate: 0,
-  //   quantity: 0,
-  //   description: 0,
-  //   startprice: 0,
-  //   selectedcrop: ""
-  // };
-
-  // user = props.user;
-  // username = props.username
-
-  // accessToken = JSON.parse(localStorage.getItem("profile")).accessToken;
-
-  // }
+  const router = useRouter()
 
   useEffect(() => {
     // console.log("in component did mount user is", username);
     const getCrops = async () => {
+      setError(false)
+      setAlertMsg("")
       setLoading(true)
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/farmer/getcrop/${props.username}`,
-          {
-            headers: {
-              "x-access-token": accessToken,
-            },
-          }
+        const { data: { crops: { crops } } } = await axios.get(
+          `/api/crops/getCrops`,
         )
-        console.log(response.data);
-        let cropslist = response.data.crops.map(function (crop) {
+        let cropslist = crops.map(function (crop) {
           let x = {};
           x.name = crop.name;
           x.rating = crop.rating;
           x.id = crop._id;
           return x;
         })
-        // setState(prevState => ({ ...prevState, cropslist: cropslist }));
         setCropsList(cropslist)
-        // console.log(cropslist);
-        // console.log(state.cropslist);
       } catch (error) {
-        //reload page
-        console.log("FARMER FORM FETCH CROPS ERROR", error);
+        setError(true)
+        setAlertMsg("Error fetching data!")
       };
       setLoading(false)
     }
     getCrops()
   }, [])
-
-  // var handleDateValues;
-  // const handleChange = (input) => (event) => {
-  //   states[input] = event.target.value;
-  //   console.log(input + event.target.value);
-  // };
-
-  // if state.alertmsg is updated, then the alert will be shown
-  // if state.alertmsg is not updated, then the alert will be hidden
-  // useEffect(() => {
-  //   if (alertMsg !== "") {
-  //     alert(alertMsg);
-  //     setAlertMsg("")
-  //   }
-  // }, [alertMsg])
 
   const handleSubmit = async (e) => {
     // check if any of the fields are empty
@@ -214,7 +104,8 @@ const FarmerForm = (props) => {
     } else {
       e.preventDefault();
       try {
-        const suc = await axios.post("http://localhost:8080/api/farmer/createauction", {
+
+        const suc = await axios.post("/api/auctions/createauction", {
           //TODO: Add address here like : "localhost:3000/api/farmer/createauction"
           startdate: startDate,
           duration: duration,
@@ -223,12 +114,7 @@ const FarmerForm = (props) => {
           description: description,
           startprice: startPrice,
           crop: selectedCrop,
-        },
-          {
-            headers: {
-              "x-access-token": accessToken,
-            },
-          });
+        });
         // console.log(suc);
         // setAlertMsg("Auction created successfully")
         // setOpen(true)
@@ -243,13 +129,16 @@ const FarmerForm = (props) => {
         setHarvestDate(null)
         setQuantity(0)
         setStartPrice(0)
-        history.push('/auction', {
-          msg: 'Auction created successfully!'
+        // router.push("/auction")
+        router.push({
+          pathname: '/auction', query: {
+            msg: 'Auction created successfully!'
+          }
         })
       } catch (error) {
         // setState({ alertmsg: "Auction not created" });
-        // console.log(error.response?.data.message);
-        setAlertMsg(`Auction not created! - ${error.response?.data.message}`)
+        console.log(error.response?.data.message);
+        setAlertMsg(`Auction not created! - ${error.response?.data.msg}`)
         setOpen(true)
         setError(true)
       }
@@ -291,12 +180,6 @@ const FarmerForm = (props) => {
 
   };
 
-  // console.log("FARMER FORM: duration ", new Date(duration), duration);
-  // console.log("FARMER FORM: start date", new Date(startDate), duration);
-
-
-  // use the bootstrap classes and styles to create the following ui form
-  // render() {
   return (
     <Container sx={{ mt: 3 }}>
       <Typography
@@ -327,21 +210,6 @@ const FarmerForm = (props) => {
               </Select>
             </FormControl>
           </Grid>
-          {/* <div className="form-group p-2 ">
-          <label>Crop</label>
-          <select
-            className="form-control"
-            onChange={handleChange("selectedcrop")}
-            style={{ border: "1.5px solid black" }}
-          >
-            <option value="">Select Crop</option>
-            {state.cropslist.map((crop) => (
-              <option value={crop.id} key={crop.id}>{crop.name}</option>
-            ))}
-          </select>
-        </div> */}
-          {/* <div className="form-group p-2 "> */}
-          {/* <label>Start Date</label> */}
           <Grid item xxs={12} sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'center' }}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               {/* <Stack spacing={3}> */}
@@ -400,23 +268,6 @@ const FarmerForm = (props) => {
               }}
             />
           </Grid>
-          {/* </div> */}
-          {/* <div className="form-group p-2 "> */}
-          {/* <label>Duration</label> */}
-          {/* <div className="row"> */}
-          {/* <div className="col-md-4"> */}
-          {/* <Grid item xxs={12}>
-          </Grid> */}
-          {/* </div> */}
-          {/* <div className="col-md-4"> */}
-          {/* <Grid item xxs={12}>
-          </Grid> */}
-          {/* </div> */}
-
-          {/* </div> */}
-          {/* </div> */}
-          {/* <div className="form-group p-2 "> */}
-          {/* <label>Harvest Date</label> */}
           <Grid item xxs={12}>
             <TextField
               type="text"
