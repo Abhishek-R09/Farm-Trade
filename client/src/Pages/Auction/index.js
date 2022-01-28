@@ -23,9 +23,6 @@ import { useSession } from "next-auth/react";
 
 const Auction = () => {
   const { status } = useSession();
-  if (status === "loading" || status === "unauthenticated") {
-    return <h1>Please Login to continue!</h1>;
-  }
 
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -61,6 +58,10 @@ const Auction = () => {
       setFutureAuction([]);
     };
   }, []);
+
+  if (status === "loading" || status === "unauthenticated") {
+    return <h1>Please Login to continue!</h1>;
+  }
 
   return (
     <Container maxWidth="xl">
@@ -300,7 +301,7 @@ const Tile = (props) => {
   const showButton = () => {
     if (type === "present") {
       return (
-        <Link href={`/auction/${props.auc._id}`}>
+        <Link href={`/auction/${props.auc._id}`} passHref>
           <Button
             variant="contained"
             color="primary"
@@ -332,7 +333,15 @@ const Tile = (props) => {
         setType("past");
       }
     }
-  }, [timeLeft.seconds, timeLeft.minutes, timeLeft.hours, timeLeft.days]);
+  }, [
+    timeLeft.seconds,
+    timeLeft.minutes,
+    timeLeft.hours,
+    timeLeft.days,
+    props.auc.duration,
+    props.auc.startdate,
+    type,
+  ]);
 
   return (
     <>
@@ -353,7 +362,7 @@ const Tile = (props) => {
           // image={wheatImg}
           alt="Paella dish"
         >
-          <Image src={wheatImg} />
+          <Image src={wheatImg} alt="Wheat Crop" />
         </CardMedia>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">

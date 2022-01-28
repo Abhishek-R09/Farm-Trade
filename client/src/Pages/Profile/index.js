@@ -285,7 +285,7 @@ const AuctionCard = ({ auction, index }) => {
           }`}
         />
         <CardMedia height="194" alt="Paella dish">
-          <Image src={wheatImg} />
+          <Image src={wheatImg} alt="Wheat Crop" />
         </CardMedia>
         <CardContent>
           <p>Start Date: {epochToDate(Number(auction.startdate))} </p>

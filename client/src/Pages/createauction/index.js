@@ -23,9 +23,6 @@ import { useSession } from "next-auth/react";
 
 const FarmerForm = (props) => {
   const { status } = useSession();
-  if (status === "loading" || status === "unauthenticated") {
-    return <h1>Please login to continue</h1>;
-  }
 
   const [alertMsg, setAlertMsg] = useState("");
   const [open, setOpen] = useState(false);
@@ -199,6 +196,10 @@ const FarmerForm = (props) => {
       handleSubmit(e);
     }
   };
+
+  if (status === "loading" || status === "unauthenticated") {
+    return <h1>Please login to continue</h1>;
+  }
 
   return (
     <Container sx={{ mt: 3 }}>

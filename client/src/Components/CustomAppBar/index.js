@@ -82,7 +82,7 @@ export default function MenuAppBar(props) {
           </div>
           {router.pathname === "/" && status === "authenticated" && (
             <>
-              <Link href="/auction">
+              <Link href="/auction" passHref>
                 <Button
                   sx={{
                     marginRight: "10px",
@@ -96,7 +96,7 @@ export default function MenuAppBar(props) {
                   Auction
                 </Button>
               </Link>
-              <Link href="/testprotected">
+              <Link href="/testprotected" passHref>
                 <Button
                   sx={{
                     marginRight: "10px",
@@ -243,7 +243,7 @@ export default function MenuAppBar(props) {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <Link href="/login">
+                  <Link href="/login" passHref>
                     <MenuItem component="a" onClick={handleClose}>
                       <ListItemIcon>
                         <AccountCircle fontSize="small" />
@@ -251,7 +251,7 @@ export default function MenuAppBar(props) {
                       Login
                     </MenuItem>
                   </Link>
-                  <Link href="/signup">
+                  <Link href="/signup" passHref>
                     <MenuItem component="a" onClick={handleClose}>
                       <ListItemIcon>
                         <AccountCircle fontSize="small" />

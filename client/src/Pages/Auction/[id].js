@@ -49,48 +49,49 @@ const BidPage = () => {
   const user = session?.user?.user;
   const role = user?.roles[0].name;
 
-  const getData = async () => {
-    setLoading(true);
-    try {
-      const {
-        data: { auctionDetails },
-      } = await axios.get(`/api/auctions/${id}`);
-      const { bids: previousBids, ...bidDetails } = auctionDetails;
-      setBids(previousBids);
-      setData(bidDetails);
-    } catch (err) {
-      console.log(err);
-      setError(true);
-      setAlertMsg(err);
-    }
-    setLoading(false);
-  };
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      try {
+        const {
+          data: { auctionDetails },
+        } = await axios.get(`/api/auctions/${id}`);
+        const { bids: previousBids, ...bidDetails } = auctionDetails;
+        setBids(previousBids);
+        setData(bidDetails);
+      } catch (err) {
+        console.log(err);
+        setError(true);
+        setAlertMsg(err);
+      }
+      setLoading(false);
+    };
+    getData();
+  }, [id]);
 
   useEffect(() => {
-    getData();
+    const getBids = async () => {
+      try {
+        const {
+          data: {
+            bids: { bids: newBids },
+          },
+        } = await axios.get(`/api/auctions/bids/${id}`);
+        // console.log(data)
+        setBids(newBids);
+      } catch (err) {
+        console.log(err);
+        setError(true);
+        setAlertMsg(err);
+      }
+    };
     const timer = setInterval(() => {
       getBids();
     }, 5000);
     return () => {
       clearInterval(timer);
     };
-  }, []);
-
-  const getBids = async () => {
-    try {
-      const {
-        data: {
-          bids: { bids: newBids },
-        },
-      } = await axios.get(`/api/auctions/bids/${id}`);
-      // console.log(data)
-      setBids(newBids);
-    } catch (err) {
-      console.log(err);
-      setError(true);
-      setAlertMsg(err);
-    }
-  };
+  }, [id]);
 
   // useEffect(() => {
   //   const timer = setInterval(() => {
@@ -178,7 +179,7 @@ const BidPage = () => {
           <Grid item xs={12} md={6}>
             <Card>
               <CardMedia alt="Paella dish">
-                <Image src={wheatImg} />
+                <Image src={wheatImg} alt="Wheat Crop" />
               </CardMedia>
               <CardActions sx={{ justifyContent: "center" }}>
                 <Pagination count={1} variant="outlined" />

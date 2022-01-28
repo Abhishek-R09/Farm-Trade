@@ -91,7 +91,7 @@ const ResponsiveDrawer = (props) => {
       <Divider />
       <List>
         {drawerLinks.map((link, index) => (
-          <Link href={link.link} key={link.link}>
+          <Link href={link.link} key={link.link} passHref>
             <ListItemButton component="a">
               <ListItemIcon>{link.icon}</ListItemIcon>
               <ListItemText primary={link.text} />
@@ -103,7 +103,7 @@ const ResponsiveDrawer = (props) => {
       <List>
         {role === "Farmer" &&
           farmerLinks.map((link, index) => (
-            <Link href={link.link} key={link.link}>
+            <Link href={link.link} key={link.link} passHref>
               <ListItemButton component="a">
                 <ListItemIcon>{link.icon}</ListItemIcon>
                 <ListItemText primary={link.text} />
@@ -112,7 +112,7 @@ const ResponsiveDrawer = (props) => {
           ))}
         {role === "Admin" &&
           adminLinks.map((link, index) => (
-            <Link href={link.link} key={link.link}>
+            <Link href={link.link} key={link.link} passHref>
               <ListItemButton component="a">
                 <ListItemIcon>{link.icon}</ListItemIcon>
                 <ListItemText primary={link.text} />
