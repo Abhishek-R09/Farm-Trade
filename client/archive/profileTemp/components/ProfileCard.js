@@ -7,15 +7,12 @@ import {
   GrStatusCritical,
 } from "react-icons/all";
 
-
-// role 
+// role
 // username
 // email id
-// first name 
+// first name
 // last name
 // array of auctions participated
-
-
 
 const ProfileCard = ({ user }) => {
   return (
@@ -25,11 +22,20 @@ const ProfileCard = ({ user }) => {
         className="imgStyle"
         height="200px"
         width="200px"
-        style={{display: "inline-block"}}
+        style={{ display: "inline-block" }}
       />
-      <div style={{ display: "table", margin: "0 auto",  display: "inline-block", padding: "20px"}}>
+      <div
+        style={{
+          display: "table",
+          margin: "0 auto",
+          display: "inline-block",
+          padding: "20px",
+        }}
+      >
         <h5 style={h5Style}>
-          <AiOutlineUser style={{ marginRight: "5px", height: "1.5em", width: "1.5em"}} />
+          <AiOutlineUser
+            style={{ marginRight: "5px", height: "1.5em", width: "1.5em" }}
+          />
           {user.firstname} {user.lastname}
         </h5>
         <h5
@@ -41,22 +47,32 @@ const ProfileCard = ({ user }) => {
               : yellowStyle
           }
         >
-          <FcRating style={{ marginRight: "5px", height: "1.5em", width: "1.5em" }} />
+          <FcRating
+            style={{ marginRight: "5px", height: "1.5em", width: "1.5em" }}
+          />
           <span>{user.rating}</span>
         </h5>
         <h5 style={h5Style}>
-          <HiUserCircle style={{ marginRight: "5px", height: "1.5em", width: "1.5em" }} />
+          <HiUserCircle
+            style={{ marginRight: "5px", height: "1.5em", width: "1.5em" }}
+          />
           {user.username}
         </h5>
         <h5 style={h5Style}>
-          <MdEmail style={{ marginRight: "5px", height: "1.5em", width: "1.5em" }} />
+          <MdEmail
+            style={{ marginRight: "5px", height: "1.5em", width: "1.5em" }}
+          />
           {user.email}
         </h5>
         <h5 style={user.status == "Active" ? greenStyle : redStyle}>
           {user.status == "Active" ? (
-            <GrStatusGood style={{ marginRight: "5px", height: "1.5em", width: "1.5em" }} />
+            <GrStatusGood
+              style={{ marginRight: "5px", height: "1.5em", width: "1.5em" }}
+            />
           ) : (
-            <GrStatusCritical style={{ marginRight: "5px", height: "1.5em", width: "1.5em" }} />
+            <GrStatusCritical
+              style={{ marginRight: "5px", height: "1.5em", width: "1.5em" }}
+            />
           )}
           {user.status}
         </h5>

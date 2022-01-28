@@ -10,15 +10,14 @@ import {
   Container,
   Alert,
   Collapse,
-  IconButton
+  IconButton,
 } from "@mui/material";
 // import useStyles from "./styles";
-import { Close as CloseIcon } from '@mui/icons-material/';
-import { useSession } from 'next-auth/react';
+import { Close as CloseIcon } from "@mui/icons-material/";
+import { useSession } from "next-auth/react";
 
 const Admin = () => {
-
-  const { status } = useSession()
+  const { status } = useSession();
   const [cropName, setCropName] = useState("");
   const [username, setUsername] = useState("");
   const [rating, setRating] = useState(0);
@@ -28,9 +27,8 @@ const Admin = () => {
   const [error, setError] = useState(false);
 
   if (status === "loading" || status === "unauthenticated") {
-    return <h1>Please Login to continue</h1>
+    return <h1>Please Login to continue</h1>;
   }
-
 
   // const classes = useStyles();
 
@@ -38,26 +36,23 @@ const Admin = () => {
     e.preventDefault();
     // console.log(cropName, username, rating, image);
     try {
-      const res = await axios.post(
-        "/api/crops/addCrop",
-        {
-          cropName,
-          username,
-          rating,
-          image,
-        }
-      );
-      console.log(res)
-      setOpen(true)
-      setAlertMsg("Successfully added new Crop!")
-      setCropName("")
-      setUsername("")
-      setError(false)
+      const res = await axios.post("/api/crops/addCrop", {
+        cropName,
+        username,
+        rating,
+        image,
+      });
+      console.log(res);
+      setOpen(true);
+      setAlertMsg("Successfully added new Crop!");
+      setCropName("");
+      setUsername("");
+      setError(false);
     } catch (e) {
       console.log({ ...e });
-      setOpen(true)
-      setAlertMsg(`${e.response?.data?.msg} - Failed to add new crop!`)
-      setError(true)
+      setOpen(true);
+      setAlertMsg(`${e.response?.data?.msg} - Failed to add new crop!`);
+      setError(true);
     }
 
     // console.log(res);
@@ -65,12 +60,12 @@ const Admin = () => {
 
   return (
     <Container component="main" maxWidth="xs" style={{ marginTop: "100px" }}>
-      <Paper elevation={3} style={{ padding: '20px' }}>
+      <Paper elevation={3} style={{ padding: "20px" }}>
         <Typography
           sx={{
-            color: '#1B5E20',
-            fontFamily: 'Merriweather',
-            margin: '20px auto'
+            color: "#1B5E20",
+            fontFamily: "Merriweather",
+            margin: "20px auto",
           }}
           variant="h3"
           component="h2"
@@ -82,9 +77,15 @@ const Admin = () => {
             <Grid item xxs={12}>
               <Collapse in={open}>
                 <Alert
-                  action={<IconButton onClick={() => {
-                    setOpen(false);
-                  }}><CloseIcon /></IconButton>}
+                  action={
+                    <IconButton
+                      onClick={() => {
+                        setOpen(false);
+                      }}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  }
                   // action={
                   //   <IconButton
                   //     aria-label="close"
@@ -136,11 +137,15 @@ const Admin = () => {
                 />
               </Grid> */}
             <Grid item xxs={12}>
-              <Button fullWidth variant="contained" color="secondary" type="submit">
+              <Button
+                fullWidth
+                variant="contained"
+                color="secondary"
+                type="submit"
+              >
                 Submit
               </Button>
             </Grid>
-
           </Grid>
         </form>
       </Paper>

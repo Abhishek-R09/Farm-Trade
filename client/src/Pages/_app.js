@@ -1,17 +1,18 @@
 // import App from 'next/app'
-import { ThemeProvider, Box } from '@mui/material';
-import theme from '../theme'
-import { SnackbarProvider } from 'notistack';
-import ResponsiveDrawer from '../Components/Drawer';
-import { SessionProvider } from "next-auth/react"
-import '../index.css'
-import { useRouter } from "next/router"
+import React from "react";
+import PropTypes from "prop-types";
+import { ThemeProvider, Box } from "@mui/material";
+import theme from "../theme";
+import { SnackbarProvider } from "notistack";
+import ResponsiveDrawer from "../Components/Drawer";
+import { SessionProvider } from "next-auth/react";
+import "../index.css";
+import { useRouter } from "next/router";
 
 const drawerWidth = 240;
 
-function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
-
-  const router = useRouter()
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  const router = useRouter();
 
   return (
     <SessionProvider session={session}>
@@ -20,14 +21,27 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
           <ResponsiveDrawer />
           <Box
             component="main"
-            sx={{ width: { sm: !(['/', '/login', '/signup'].includes(router.pathname)) ? `calc(100% - ${drawerWidth}px)` : '100%' }, ml: { sm: !(['/', '/login', '/signup'].includes(router.pathname)) && `${drawerWidth}px` }, mt: 4, pt: 4 }}
+            sx={{
+              width: {
+                sm: !["/", "/login", "/signup"].includes(router.pathname)
+                  ? `calc(100% - ${drawerWidth}px)`
+                  : "100%",
+              },
+              ml: {
+                sm:
+                  !["/", "/login", "/signup"].includes(router.pathname) &&
+                  `${drawerWidth}px`,
+              },
+              mt: 4,
+              pt: 4,
+            }}
           >
             <Component {...pageProps} />
           </Box>
         </SnackbarProvider>
       </ThemeProvider>
     </SessionProvider>
-  )
+  );
 }
 
 // Only uncomment this method if you have blocking data requirements for
@@ -42,4 +56,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
 //   return { ...appProps }
 // }
 
-export default MyApp
+MyApp.propTypes = {
+  Component: PropTypes.elementType,
+  pageProps: PropTypes.instanceOf(Object),
+  session: PropTypes.shape({
+    user: PropTypes.object,
+  }),
+};
+
+export default MyApp;

@@ -11,7 +11,7 @@ const BuyerSchema = new mongoose.Schema({
       ref: "Auction",
     },
   ],
-})
+});
 
 module.exports = mongoose.models?.Buyer || mongoose.model("Buyer", BuyerSchema);
 

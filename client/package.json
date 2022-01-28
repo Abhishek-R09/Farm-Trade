@@ -62,5 +62,9 @@
       "not dead",
       "not op_mini all"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^8.7.0",
+    "eslint-plugin-react": "^7.28.0"
   }
 }

@@ -1,23 +1,28 @@
-import { useState, useRef } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import NextLink from 'next/link';
-import { useRouter } from 'next/router'
-import HomeIcon from '@mui/icons-material/Home';
-import axios from "axios";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { InputAdornment, IconButton, Snackbar, Alert, LinearProgress } from '@mui/material';
+import React, { useState, useRef } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import HomeIcon from "@mui/icons-material/Home";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {
+  InputAdornment,
+  IconButton,
+  Snackbar,
+  Alert,
+  LinearProgress,
+} from "@mui/material";
 
-import { getCsrfToken, getSession, signIn, useSession } from 'next-auth/react'
+import { getSession, signIn } from "next-auth/react";
 
 function Copyright(props) {
   return (
@@ -27,24 +32,23 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {'Copyright © '}
-      <NextLink href="/">
+      {"Copyright © "}
+      <NextLink href="/" passHref>
         <Link color="inherit" component="a">
           FarmTrade.com
         </Link>
-      </NextLink>{' '}
+      </NextLink>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
 
-const SignInPage = ({ setUser, setUsername: updateUsername, csrfToken }) => {
-
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const SignInPage = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
   // const [role, setRole] = useState('Farmer');
   // const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -53,28 +57,26 @@ const SignInPage = ({ setUser, setUsername: updateUsername, csrfToken }) => {
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
 
-  const firstInputRef = useRef()
+  const firstInputRef = useRef();
 
   const handleSubmit = async (event) => {
     setLoading(true);
     setError(false);
-    setErrorMsg('');
+    setErrorMsg("");
     event.preventDefault();
-    const values = {
-      username,
-      password,
-      // role,
-      // remember,
-    };
 
     try {
-      const data = await signIn("credentials", { redirect: false, username, password })
+      const data = await signIn("credentials", {
+        redirect: false,
+        username,
+        password,
+      });
 
       if (data.error) {
         console.log(data.error);
         let errorMsg = "";
         switch (data.error) {
-          case 'CredentialsSignin':
+          case "CredentialsSignin":
             errorMsg = "Invalid Credentials!";
             break;
           default:
@@ -88,7 +90,6 @@ const SignInPage = ({ setUser, setUsername: updateUsername, csrfToken }) => {
       if (data.ok && data.status == 200) {
         router.push("/profile");
       }
-
     } catch (error) {
       console.log(error);
       console.log("catch fail");
@@ -96,8 +97,8 @@ const SignInPage = ({ setUser, setUsername: updateUsername, csrfToken }) => {
       setErrorMsg("Something went wrong!");
     }
     // setUsername('');
-    firstInputRef.current.focus()
-    setPassword('');
+    firstInputRef.current.focus();
+    setPassword("");
     setLoading(false);
   };
 
@@ -107,43 +108,53 @@ const SignInPage = ({ setUser, setUsername: updateUsername, csrfToken }) => {
       maxWidth="xs"
       sx={{
         border: { sm: 1 },
-        borderColor: 'grey.100',
+        borderColor: "grey.100",
         borderRadius: 5,
-        marginTop: { xs: '10px', sm: '50px' },
-        marginBottom: '50px',
-        padding: '30px',
+        marginTop: { xs: "10px", sm: "50px" },
+        marginBottom: "50px",
+        padding: "30px",
         // mt: 6,
       }}
     >
-      <Snackbar open={error} autoHideDuration={6000} onClose={() => {
-        setError(false);
-        setErrorMsg('');
-      }}>
-        <Alert onClose={() => {
+      <Snackbar
+        open={error}
+        autoHideDuration={6000}
+        onClose={() => {
           setError(false);
-          setErrorMsg('');
-        }} severity="error" sx={{ width: '100%' }}>
+          setErrorMsg("");
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setError(false);
+            setErrorMsg("");
+          }}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
           {errorMsg}
         </Alert>
       </Snackbar>
       <CssBaseline />
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        {loading && <Box sx={{ width: '100%' }}>
-          <LinearProgress color="secondary" />
-        </Box>}
+        {loading && (
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress color="secondary" />
+          </Box>
+        )}
         <NextLink href="/" passHref>
-          <Link style={{ display: 'flex' }} component="a">
+          <Link style={{ display: "flex" }} component="a">
             <HomeIcon />
             Go to Home Page
           </Link>
         </NextLink>
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -176,7 +187,7 @@ const SignInPage = ({ setUser, setUsername: updateUsername, csrfToken }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 type={showPassword ? "text" : "password"}
                 id="password"
-                autoComplete='current-password'
+                autoComplete="current-password"
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -186,7 +197,7 @@ const SignInPage = ({ setUser, setUsername: updateUsername, csrfToken }) => {
                     </InputAdornment>
                   ),
                 }}
-              // autoComplete="current-password"
+                // autoComplete="current-password"
               />
             </Grid>
             {/* <Grid item xs={12}>
@@ -251,24 +262,22 @@ const SignInPage = ({ setUser, setUsername: updateUsername, csrfToken }) => {
 };
 
 export async function getServerSideProps(context) {
-  const { req, res } = context
-  const session = await getSession({ req })
+  const { req } = context;
+  const session = await getSession({ req });
 
   // console.log(session);
   if (session) {
     return {
       redirect: {
-        destination: '/testprotected',
+        destination: "/testprotected",
         permanent: false,
       },
-    }
+    };
   }
 
   return {
-    props: {
-      csrfToken: await getCsrfToken(context)
-    }
-  }
+    props: {},
+  };
 }
 
 export default SignInPage;

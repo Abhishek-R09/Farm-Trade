@@ -9,7 +9,6 @@ db.buyer = require("./buyer.model");
 db.crop = require("./crop.model");
 db.farmer = require("./farmer.model");
 
-
 // db.mongoose = mongoose;
 
 // db.user = require("./user.model");

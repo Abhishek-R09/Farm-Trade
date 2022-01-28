@@ -58,32 +58,71 @@ const Dashboard = ({ setUser }) => {
             <strong>Dashboard</strong>
           </Typography>
           <List style={{ display: "flex" }}>
-            <ListItem button color="inherit" component={Link} to="/profile" style={{ borderRadius: "10px" }}>
-              <ListItemText style={{ color: "inherit" }}> <strong>Profile</strong></ListItemText>
+            <ListItem
+              button
+              color="inherit"
+              component={Link}
+              to="/profile"
+              style={{ borderRadius: "10px" }}
+            >
+              <ListItemText style={{ color: "inherit" }}>
+                {" "}
+                <strong>Profile</strong>
+              </ListItemText>
             </ListItem>
 
             {role === "admin" ? (
-              <ListItem button color="inherit" component={Link} to="/admin" style={{ borderRadius: "10px" }}>
-                <ListItemText><strong>AddCrop</strong></ListItemText>
+              <ListItem
+                button
+                color="inherit"
+                component={Link}
+                to="/admin"
+                style={{ borderRadius: "10px" }}
+              >
+                <ListItemText>
+                  <strong>AddCrop</strong>
+                </ListItemText>
               </ListItem>
             ) : null}
 
-            <ListItem button color="inherit" component={Link} to="/auction" style={{ borderRadius: "10px" }}>
-              <ListItemText><strong>Auction</strong></ListItemText>
+            <ListItem
+              button
+              color="inherit"
+              component={Link}
+              to="/auction"
+              style={{ borderRadius: "10px" }}
+            >
+              <ListItemText>
+                <strong>Auction</strong>
+              </ListItemText>
             </ListItem>
 
             {role === "farmer" ? (
-              <ListItem button color="inherit" component={Link} to="/predict" style={{ borderRadius: "10px" }}>
-                <ListItemText style={{ color: "inherit" }}><strong>Predict production</strong></ListItemText>
+              <ListItem
+                button
+                color="inherit"
+                component={Link}
+                to="/predict"
+                style={{ borderRadius: "10px" }}
+              >
+                <ListItemText style={{ color: "inherit" }}>
+                  <strong>Predict production</strong>
+                </ListItemText>
               </ListItem>
-            ) : null
-            }
+            ) : null}
             {role === "farmer" ? (
-              <ListItem button color="inherit" component={Link} to="/suggest" style={{ borderRadius: "10px" }}>
-                <ListItemText style={{ color: "inherit" }}><strong>Crop suggestion</strong></ListItemText>
+              <ListItem
+                button
+                color="inherit"
+                component={Link}
+                to="/suggest"
+                style={{ borderRadius: "10px" }}
+              >
+                <ListItemText style={{ color: "inherit" }}>
+                  <strong>Crop suggestion</strong>
+                </ListItemText>
               </ListItem>
-            ) : null
-            }
+            ) : null}
 
             {role !== "buyer" ? (
               <ListItem
@@ -94,9 +133,7 @@ const Dashboard = ({ setUser }) => {
                 style={{ borderRadius: "10px" }}
               >
                 <ListItemText>
-                  <strong>
-                    Create Auction
-                  </strong>
+                  <strong>Create Auction</strong>
                 </ListItemText>
               </ListItem>
             ) : null}

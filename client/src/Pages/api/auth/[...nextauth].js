@@ -1,22 +1,22 @@
-import NextAuth from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import dbConnect from '../../../lib/dbconnect'
-import User from '../../../model/user.model'
-import Role from '../../../model/role.model'
-import bcrypt from 'bcryptjs'
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import dbConnect from "../../../lib/dbconnect";
+import User from "../../../model/user.model";
+import Role from "../../../model/role.model";
+import bcrypt from "bcryptjs";
 
 export default NextAuth({
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: 'Credentials',
+      name: "Credentials",
       // The credentials is used to generate a suitable form on the sign in page.
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
         // You need to provide your own logic here that takes the credentials
@@ -25,9 +25,9 @@ export default NextAuth({
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
-        await dbConnect()
+        await dbConnect();
 
-        const { username, password } = credentials
+        const { username, password } = credentials;
 
         // let user = null;
         try {
@@ -86,7 +86,8 @@ export default NextAuth({
           // console.log("response set");
 
           return {
-            id: user._id, user: {
+            id: user._id,
+            user: {
               id: user._id,
               status: user.status,
               roles: user.roles,
@@ -94,39 +95,39 @@ export default NextAuth({
               email: user.email,
               firstName: user.firstname,
               lastName: user.lastname,
-            }
-          }
+            },
+          };
           // username: user.username, email: user.email, roles: authorities }
         } catch (err) {
           console.log(err);
           return null;
         }
-      }
-    })
+      },
+    }),
   ],
   secret: process.env.SECRET,
   session: {
     strategy: "jwt",
     maxAge: 60 * 60 * 24 * 30,
-    updateAge: 60 * 60 * 24
+    updateAge: 60 * 60 * 24,
   },
   jwt: {
     secret: process.env.JWT_SECRET,
     maxAge: 60 * 60 * 24 * 30,
   },
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   callbacks: {
     jwt: async ({ token, user, account, profile }) => {
       // console.log("jwt ", token, user, account, profile);
-      user && (token.user = user)
-      return token
+      user && (token.user = user);
+      return token;
     },
     session: async ({ session, token }) => {
       // console.log("session ", session, token);
-      session.user = token.user
-      return session
-    }
-  }
-})
+      session.user = token.user;
+      return session;
+    },
+  },
+});

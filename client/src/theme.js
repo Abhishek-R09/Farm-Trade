@@ -1,5 +1,5 @@
-import { createTheme } from '@mui/material';
-import { lightGreen, amber, brown } from '@mui/material/colors';
+import { createTheme } from "@mui/material";
+import { lightGreen, amber, brown } from "@mui/material/colors";
 
 const theme = createTheme({
   // palette: {
@@ -15,7 +15,7 @@ const theme = createTheme({
   //   },
   // },
   palette: {
-    type: 'light',
+    type: "light",
     primary: {
       main: lightGreen[300],
       light: lightGreen[100],
@@ -27,7 +27,7 @@ const theme = createTheme({
       dark: amber[900],
     },
     text: {
-      primary: '#1B5E20',
+      primary: "#1B5E20",
       secondary: brown[900],
     },
   },

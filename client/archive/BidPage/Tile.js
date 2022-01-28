@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import {
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-
-} from "@material-ui/core";
+import { Grid, Card, CardContent, Typography } from "@material-ui/core";
 import Countdown from "react-countdown";
 
 var d = new Date();

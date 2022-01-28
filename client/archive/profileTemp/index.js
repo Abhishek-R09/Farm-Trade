@@ -1,26 +1,23 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react"
-import { Container, Typography } from "@mui/material"
+import { useSession } from "next-auth/react";
+import { Container, Typography } from "@mui/material";
 import axios from "axios";
 //get the data in here and then pass this to Card component
 
-// role 
+// role
 // username
 // email id
-// first name 
+// first name
 // last name
 // array of auctions participated
 // rating
 
-
-
 const ProfilePage = () => {
   const [auctionslist, setAuctionslist] = useState([]);
-  const { data, status } = useSession()
-  const user = data?.user?.user
+  const { data, status } = useSession();
+  const user = data?.user?.user;
   console.log("profile", user);
-
 
   // useEffect(() => {
 
@@ -35,7 +32,6 @@ const ProfilePage = () => {
   //   return () => { setAuctionslist([]) }
 
   // }, [])
-
 
   //   const user = {
   //     username: 'nelsonMandela',
@@ -108,9 +104,9 @@ const ProfilePage = () => {
     <Container maxWidth="xl" className="App">
       <Typography
         sx={{
-          color: '#1B5E20',
-          fontFamily: 'Merriweather',
-          margin: '20px auto 10px'
+          color: "#1B5E20",
+          fontFamily: "Merriweather",
+          margin: "20px auto 10px",
         }}
         variant="h4"
         component="h2"
@@ -124,7 +120,7 @@ const ProfilePage = () => {
             {status === "authenticated" && <ProfileCard user={user} />}
           </div>
           <div className="col-md-8">
-            <div className="row" style={{ marginTop: "20px" }} >
+            <div className="row" style={{ marginTop: "20px" }}>
               <div className="col-md-12">
                 <h3>Auctions Participated</h3>
               </div>
@@ -132,22 +128,27 @@ const ProfilePage = () => {
             <div className="row">
               <div className="col-md-12">
                 {/* {user.auctionsParticipated.length === 0 ? */}
-                {auctionslist.length === 0 ?
+                {auctionslist.length === 0 ? (
                   <div className="alert alert-info" role="alert">
                     You have not participated in any auction yet.
                   </div>
-                  :
+                ) : (
                   auctionslist.map((auction, index) => {
-                    return <AuctionCard key={index} auction={auction} index={index} />
+                    return (
+                      <AuctionCard
+                        key={index}
+                        auction={auction}
+                        index={index}
+                      />
+                    );
                   })
-                }
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
     </Container>
-
   );
 };
 
@@ -164,7 +165,9 @@ const ProfileCard = ({ user }) => {
             />
           </div>
           <div className="col-md-8">
-            <h3>{user.firstName} {user.lastName}</h3>
+            <h3>
+              {user.firstName} {user.lastName}
+            </h3>
             <p>{user.email}</p>
             <p>{user.status}</p>
             <p>{user.roles[0].name}</p>
@@ -175,10 +178,10 @@ const ProfileCard = ({ user }) => {
   );
 };
 
-const epochToDate = epoch => {
+const epochToDate = (epoch) => {
   const date = new Date(epoch);
   // console.log("epoch to date", date)
-  return date.toDateString()
+  return date.toDateString();
 };
 
 const AuctionCard = ({ user, auction, index }) => {
@@ -198,7 +201,12 @@ const AuctionCard = ({ user, auction, index }) => {
             <h3>Auction {index + 1}</h3>
             <p>Auction Description: {auction.description} </p>
             <p>Start Date: {epochToDate(Number(auction.startdate))} </p>
-            <p>End Date : {epochToDate(Number(auction.startdate) + Number(auction.duration) * 60)} </p>
+            <p>
+              End Date :{" "}
+              {epochToDate(
+                Number(auction.startdate) + Number(auction.duration) * 60
+              )}{" "}
+            </p>
             <p>Harvest Date : {auction.harvestdate?.split("T")[0]} </p>
             <p>Crop : {auction.crop?.name} </p>
             <p>Quantity : {auction.quantity} </p>
@@ -209,7 +217,5 @@ const AuctionCard = ({ user, auction, index }) => {
     </div>
   );
 };
-
-
 
 export default ProfilePage;

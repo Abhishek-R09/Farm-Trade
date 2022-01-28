@@ -11,6 +11,6 @@ const FarmerSchema = new mongoose.Schema({
       ref: "Crop",
     },
   ],
-})
+});
 
 export default mongoose.models.Farmer || mongoose.model("Farmer", FarmerSchema);

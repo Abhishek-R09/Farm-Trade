@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
 let formattedTime;
 const User = ({ user }) => {

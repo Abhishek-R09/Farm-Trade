@@ -1,5 +1,5 @@
-import User from "../../model/user.model"
-import dbConnect from './../../lib/dbconnect';
+import User from "../../model/user.model";
+import dbConnect from "./../../lib/dbconnect";
 
 export const getprofile = (req, res) => {
   User.findOne({
@@ -30,10 +30,13 @@ export const getprofile = (req, res) => {
 
 export const getParticipatedAuctions = async (payload) => {
   try {
-    await dbConnect()
-    const auctions = await User.findOne({
-      username: payload.username,
-    }, 'auctionsParticipated')
+    await dbConnect();
+    const auctions = await User.findOne(
+      {
+        username: payload.username,
+      },
+      "auctionsParticipated"
+    )
       .populate("auctionsParticipated", "-__v")
       .exec();
 
@@ -41,9 +44,8 @@ export const getParticipatedAuctions = async (payload) => {
       return { error: true, code: 401, message: "User Not found." };
     }
 
-    return auctions
-
+    return auctions;
   } catch (err) {
-    return { error: true, code: 500, msg: err }
+    return { error: true, code: 500, msg: err };
   }
-}
+};
