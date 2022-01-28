@@ -13,7 +13,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import Alert from "@mui/material/Alert";
 import axios from "axios";
-import wheatImg from "../Images/wheat.jpg"
+import wheatImg from "../../Images/wheat.jpg"
 import { useRouter } from "next/router"
 import { useSession } from "next-auth/react"
 import Image from "next/image";
@@ -33,13 +33,9 @@ const BidPage = () => {
   });
 
   const { data: session, status } = useSession()
-
-  if (status === "unauthenticated") {
-    return <h1>Please login to continue!</h1>
-  }
   const user = session?.user?.user
   const role = user?.roles[0].name
-
+  
   const getData = async () => {
     setLoading(true)
     try {
@@ -54,7 +50,7 @@ const BidPage = () => {
     }
     setLoading(false)
   }
-
+  
   useEffect(() => {
     getData()
     const timer = setInterval(() => {
@@ -64,7 +60,7 @@ const BidPage = () => {
       clearInterval(timer)
     }
   }, [])
-
+  
   const getBids = async () => {
     try {
       const { data: { bids: { bids: newBids } } } = await axios.get(`/api/auctions/bids/${id}`)
@@ -76,43 +72,43 @@ const BidPage = () => {
       setAlertMsg(err)
     }
   }
-
+  
   // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     getBids()
-  //   }, 5000)
-  //   return () => {
-  //     clearInterval(timer)
-  //   }
-  // }, [])
-
-  const calculateTimeLeft = (startdate, duration) => {
-    let now = new Date().getTime() / 1000;
-    let end = new Date(startdate + duration * 60).getTime();
-    let timeLeft = end - now;
-    let days = Math.floor(timeLeft / (60 * 60 * 24));
-    let hours = Math.floor(
-      (timeLeft % (60 * 60 * 24)) / (60 * 60)
-    );
-    let minutes = Math.floor((timeLeft % (60 * 60)) / (60));
-    let seconds = Math.floor((timeLeft % (60)));
-    return { days, hours, minutes, seconds };
-  };
-
-
-  useEffect(() => {
-    // if (data?.startdate && data?.duration) {
-    let interval = setInterval(() => {
-      setTimeLeft(calculateTimeLeft(data?.startdate || 0, data?.duration || 0));
+    //   const timer = setInterval(() => {
+      //     getBids()
+      //   }, 5000)
+      //   return () => {
+        //     clearInterval(timer)
+        //   }
+        // }, [])
+        
+        const calculateTimeLeft = (startdate, duration) => {
+          let now = new Date().getTime() / 1000;
+          let end = new Date(startdate + duration * 60).getTime();
+          let timeLeft = end - now;
+          let days = Math.floor(timeLeft / (60 * 60 * 24));
+          let hours = Math.floor(
+            (timeLeft % (60 * 60 * 24)) / (60 * 60)
+            );
+            let minutes = Math.floor((timeLeft % (60 * 60)) / (60));
+            let seconds = Math.floor((timeLeft % (60)));
+            return { days, hours, minutes, seconds };
+          };
+          
+          
+          useEffect(() => {
+            // if (data?.startdate && data?.duration) {
+              let interval = setInterval(() => {
+                setTimeLeft(calculateTimeLeft(data?.startdate || 0, data?.duration || 0));
     }, 1000);
     return () => clearInterval(interval);
     // }
   }, [data.startdate, data.duration]);
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(bid);
-    if (role !== "farmer") {
+    if (role !== "Farmer") {
       if (bid <= 0 || !bid) {
         setAlertMsg("Invalid bid!")
         setOpen(true);
@@ -128,24 +124,27 @@ const BidPage = () => {
             bidprice: bid,
             time: Math.floor(Date.now() / 1000),
           }
-        );
-        // console.log(posres);
-        setAlertMsg("Bid placed successfully!")
+          );
+          // console.log(posres);
+          setAlertMsg("Bid placed successfully!")
+          setOpen(true);
+          setError(false)
+          setBid(0)
+        } catch (e) {
+          setAlertMsg("Not Allowed!");
+          setError(true)
+          setOpen(true);
+          console.log({ ...e });
+        }
+      } else {
+        setAlertMsg("You can't bid as you are a farmer!");
         setOpen(true);
-        setError(false)
-        setBid(0)
-      } catch (e) {
-        setAlertMsg("Not Allowed!");
         setError(true)
-        setOpen(true);
-        console.log({ ...e });
       }
-    } else {
-      setAlertMsg("You can't bid as you are a farmer!");
-      setOpen(true);
-      setError(true)
+    };
+    if (status === "loading" || status === "unauthenticated") {
+      return <h1>Please Login to continue!</h1>
     }
-  };
 
   return (
     <>

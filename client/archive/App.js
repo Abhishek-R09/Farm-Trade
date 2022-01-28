@@ -1,21 +1,21 @@
 import { useState } from 'react'
 import './index.css'
 import { Switch, Route, useLocation, Link } from 'react-router-dom'
-import HomePage from './Pages/Home';
-import SignInPage from './pages/login';
-import SignupPage from './pages/signup';
+import HomePage from '../src/Pages/Home';
+import SignInPage from '../src/pages/login';
+import SignupPage from '../src/pages/signup';
 // import Login from './Pages/Login/Login'
 import Auction from './Pages/Auction/Auction'
 // import Dashboard from './Pages/Dashboard/Dashboard'
-import BidPage from './Pages/Auction/BidPage'
-import Admin from './Pages/Admin/Admin'
+import BidPage from '../src/Pages/Auction/BidPage'
+import Admin from '../src/Pages/Admin/Admin'
 // import Leaderboard from './components/Auction/Leaderboard'
 import FarmerForm from './Pages/FarmerForm/FarmerForm'
 // import ProfilePage from './Pages/ProfilePage/ProfilePage'
-import ProfilePage from './Pages/Profile'
+import ProfilePage from '../src/Pages/Profile'
 import SuggestionPage from './Pages/tools/SuggestionPage'
 import PredictPage from './Pages/tools/PredictPage'
-import ResponsiveDrawer from './Components/Drawer';
+import ResponsiveDrawer from '../src/Components/Drawer';
 
 import { Box, Button, Container, Typography } from "@mui/material"
 

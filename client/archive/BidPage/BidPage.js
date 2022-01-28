@@ -16,7 +16,7 @@ import Alert from "@mui/material/Alert";
 import axios from "axios";
 // import User from "./User";
 // import LocationOnIcon from '@mui/icons-material/LocationOn';
-import wheatImg from "../../Images/wheat.jpg"
+import wheatImg from "../../src/Images/wheat.jpg"
 
 const BidPage = () => {
   const accessToken = JSON.parse(localStorage.getItem("profile")).accessToken;

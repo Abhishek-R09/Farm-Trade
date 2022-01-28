@@ -4,8 +4,14 @@ import axios from "axios";
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 const FarmerForm = (props) => {
+
+  const { status } = useSession()
+  if (status === "loading" || status === "unauthenticated") {
+    return <h1>Please login to continue</h1>
+  }
 
   const [alertMsg, setAlertMsg] = useState("")
   const [open, setOpen] = useState(false)

@@ -13,12 +13,19 @@ import { CardContent, Button, CardMedia, CardHeader, Avatar, Box, LinearProgress
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useSnackbar } from 'notistack';
-import wheatImg from "../Images/wheat.jpg"
+import wheatImg from "../../Images/wheat.jpg"
 import { useRouter } from "next/router"
 import Image from "next/image";
 import Link from "next/link"
+import { useSession } from 'next-auth/react';
 
 const Auction = () => {
+
+  const { status } = useSession()
+  if (status === "loading" || status === "unauthenticated") {
+    return <h1>Please Login to continue!</h1>
+  }
+
   const router = useRouter()
   const [open, setOpen] = useState(false);
   const [alertmsg, setAlertMsg] = useState("");
@@ -30,23 +37,28 @@ const Auction = () => {
   useEffect(() => {
     // console.log("AUCTION USEFFECT CALLED");
     const fetchActions = async () => {
-      setLoading(true);
-      const result1 = await axios.get(
-        "/api/auctions/getpresentauctions"
-      );
-      setPresentAuction(result1.data.auctions);
 
-      const result2 = await axios.get(
-        "/api/auctions/getcompletedauctions"
-      );
-      setPastAuction(result2.data.auctions);
+      try {
+        setLoading(true);
+        const result1 = await axios.get(
+          "/api/auctions/getpresentauctions"
+        );
+        setPresentAuction(result1.data.auctions);
 
-      const result3 = await axios.get(
-        "/api/auctions/getfutureauctions"
-      );
-      setFutureAuction(result3.data.auctions);
+        const result2 = await axios.get(
+          "/api/auctions/getcompletedauctions"
+        );
+        setPastAuction(result2.data.auctions);
 
-      setLoading(false);
+        const result3 = await axios.get(
+          "/api/auctions/getfutureauctions"
+        );
+        setFutureAuction(result3.data.auctions);
+
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
     }
     fetchActions();
     return () => {

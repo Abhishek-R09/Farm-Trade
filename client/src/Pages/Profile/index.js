@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
 import { Container, Typography, Paper, Box, TextField, Avatar, Button, Grid, Card, CardContent, CardMedia, CardHeader, Stack, Skeleton, Alert } from "@mui/material"
-import testImg from "../Images/wheat.jpg"
+import testImg from "../../Images/wheat.jpg"
 import axios from "axios";
-import wheatImg from "../Images/wheat.jpg"
+import wheatImg from "../../Images/wheat.jpg"
 import { useSession } from "next-auth/react"
 import Image from "next/image"
 
@@ -10,7 +10,6 @@ const ProfilePage = () => {
   const { data, status } = useSession()
   const user = data?.user?.user
   // console.log("profile", user);
-
   const [auctionslist, setAuctionslist] = useState([]);
 
   const [firstName, setFirstName] = useState(user?.firstName || "");
@@ -19,13 +18,14 @@ const ProfilePage = () => {
   const [username, setUsername] = useState(user?.username || "");
   const [loading, setLoading] = useState(false)
 
+
   useEffect(() => {
-    if (user) {
-      setFirstName(user.firstName)
-      setLastName(user.lastName)
-      setEmail(user.email)
-      setUsername(user.username)
-    }
+    // if (user) {
+    setFirstName(user?.firstName || "")
+    setLastName(user?.lastName || "")
+    setEmail(user?.email || "")
+    setUsername(user?.username || "")
+    // }
 
     const temp = async () => {
       setLoading(true)
@@ -41,6 +41,10 @@ const ProfilePage = () => {
 
     temp()
   }, [user]);
+
+  if (status === "loading" || status === "unauthenticated") {
+    return <h1>Please Login to continue</h1>
+  }
 
   return (<Container sx={{ mt: 3 }}>
     <Typography

@@ -94,7 +94,7 @@ const ResponsiveDrawer = (props) => {
       </List>
       <Divider />
       <List>
-        {role === "farmer" && farmerLinks.map((link, index) => (
+        {role === "Farmer" && farmerLinks.map((link, index) => (
           <Link href={link.link} key={link.link}>
             <ListItemButton component="a">
               <ListItemIcon>
@@ -104,7 +104,7 @@ const ResponsiveDrawer = (props) => {
             </ListItemButton>
           </Link>
         ))}
-        {role === "admin" && adminLinks.map((link, index) => (
+        {role === "Admin" && adminLinks.map((link, index) => (
           <Link href={link.link} key={link.link}>
             <ListItemButton component="a">
               <ListItemIcon>

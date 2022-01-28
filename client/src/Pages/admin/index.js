@@ -14,9 +14,11 @@ import {
 } from "@mui/material";
 // import useStyles from "./styles";
 import { Close as CloseIcon } from '@mui/icons-material/';
+import { useSession } from 'next-auth/react';
 
 const Admin = () => {
-  const accessToken = JSON.parse(localStorage.getItem("profile")).accessToken;
+
+  const { status } = useSession()
   const [cropName, setCropName] = useState("");
   const [username, setUsername] = useState("");
   const [rating, setRating] = useState(0);
@@ -25,6 +27,11 @@ const Admin = () => {
   const [alertmsg, setAlertMsg] = useState("");
   const [error, setError] = useState(false);
 
+  if (status === "loading" || status === "unauthenticated") {
+    return <h1>Please Login to continue</h1>
+  }
+
+
   // const classes = useStyles();
 
   const handleSubmit = async (e) => {
@@ -32,27 +39,24 @@ const Admin = () => {
     // console.log(cropName, username, rating, image);
     try {
       const res = await axios.post(
-        "http://localhost:8080/api/admin/addcrop",
+        "/api/crops/addCrop",
         {
           cropName,
           username,
           rating,
           image,
-        },
-        {
-          headers: {
-            "x-access-token": accessToken,
-          },
         }
       );
+      console.log(res)
       setOpen(true)
       setAlertMsg("Successfully added new Crop!")
       setCropName("")
       setUsername("")
       setError(false)
     } catch (e) {
+      console.log({ ...e });
       setOpen(true)
-      setAlertMsg("Failed to add new crop!")
+      setAlertMsg(`${e.response?.data?.msg} - Failed to add new crop!`)
       setError(true)
     }
 
@@ -140,7 +144,7 @@ const Admin = () => {
           </Grid>
         </form>
       </Paper>
-    </Container >
+    </Container>
   );
 };
 
