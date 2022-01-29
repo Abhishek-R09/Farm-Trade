@@ -82,7 +82,7 @@ const BidPage = () => {
       } catch (err) {
         console.log(err);
         setError(true);
-        setAlertMsg(err);
+        setAlertMsg(err.response?.data?.msg || "Something went wrong!");
       }
     };
     const timer = setInterval(() => {
