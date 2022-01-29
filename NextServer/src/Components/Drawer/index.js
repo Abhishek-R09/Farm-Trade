@@ -73,8 +73,8 @@ const ResponsiveDrawer = (props) => {
   };
 
   const logout = async () => {
-    const data = await signOut({ redirect: true, callbackUrl: "/login" });
-    // router.push(data.url);
+    const data = await signOut({ redirect: false, callbackUrl: "/login" });
+    router.push(data.url);
   };
 
   const drawer = status === "authenticated" && (

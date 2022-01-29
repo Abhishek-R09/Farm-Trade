@@ -50,7 +50,7 @@ const SignupPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("farmer");
+  const [role, setRole] = useState("Farmer");
   const [agree, setAgree] = useState(true);
   const [open, setOpen] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
@@ -78,14 +78,12 @@ const SignupPage = () => {
     };
 
     try {
-      const suc = await axios.post(
-        "http://localhost:8080/api/auth/signup",
-        values
-      );
-      console.log(suc);
+      const suc = await axios.post("/api/auth/signup", values);
+      // console.log(suc);
       setAlertMsg("Successfully Registered! Please check email to confirm!");
       setOpen(true);
     } catch (error) {
+      // console.log({...error});
       setError(true);
       setErrorMsg(error.response?.data.message || "Something went wrong!");
     }
@@ -96,7 +94,7 @@ const SignupPage = () => {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
-    setRole("farmer");
+    setRole("Farmer");
     setAgree(true);
     setLoading(false);
   };
@@ -269,9 +267,9 @@ const SignupPage = () => {
                   label="Role"
                   onChange={(e) => setRole(e.target.value)}
                 >
-                  <MenuItem value="admin">Admin</MenuItem>
-                  <MenuItem value="farmer">Farmer</MenuItem>
-                  <MenuItem value="buyer">Buyer</MenuItem>
+                  <MenuItem value="Admin">Admin</MenuItem>
+                  <MenuItem value="Farmer">Farmer</MenuItem>
+                  <MenuItem value="Buyer">Buyer</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

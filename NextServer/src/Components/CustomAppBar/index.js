@@ -35,9 +35,9 @@ export default function MenuAppBar(props) {
 
   const logout = async () => {
     handleClose();
-    const data = await signOut({ redirect: true, callbackUrl: "/login" });
-    // const data = await signOut({ redirect: false, callbackUrl: '/login' });
-    // router.push(data.url);
+    // const data = await signOut({ redirect: true, callbackUrl: "/login" });
+    const data = await signOut({ redirect: false, callbackUrl: "/login" });
+    router.push(data.url);
   };
 
   // console.log("appbar", data, status);
