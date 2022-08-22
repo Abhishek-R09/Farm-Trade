@@ -10,7 +10,14 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import GavelIcon from "@mui/icons-material/Gavel";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
+import LightbulbIcon from "@mui/icons-material/Lightbulb";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import StarBorder from "@mui/icons-material/StarBorder";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import CategoryIcon from "@mui/icons-material/Category";
 import Toolbar from "@mui/material/Toolbar";
+
 import MenuAppBar from "../CustomAppBar";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,6 +27,7 @@ import {
   CardActions,
   CardHeader,
   ListItemButton,
+  Collapse,
 } from "@mui/material";
 
 import { useSession, signOut } from "next-auth/react";
@@ -57,6 +65,18 @@ const ResponsiveDrawer = (props) => {
       link: "/createauction",
       icon: <NewReleasesIcon />,
     },
+    [
+      {
+        text: "Trending Crops",
+        link: "/trendingCrops",
+        icon: <TrendingUpIcon />,
+      },
+      {
+        text: "Crop Wise Prediction",
+        link: "/cropWisePrediction",
+        icon: <CategoryIcon />,
+      },
+    ],
   ];
   const farmerLinks = [
     {
@@ -64,6 +84,18 @@ const ResponsiveDrawer = (props) => {
       link: "/createauction",
       icon: <NewReleasesIcon />,
     },
+    [
+      {
+        text: "Trending Crops",
+        link: "/trendingCrops",
+        icon: <TrendingUpIcon />,
+      },
+      {
+        text: "Crop Wise Prediction",
+        link: "/cropWisePrediction",
+        icon: <CategoryIcon />,
+      },
+    ],
   ];
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -77,6 +109,12 @@ const ResponsiveDrawer = (props) => {
     // router.push(data.url);
   };
 
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
   const drawer = status === "authenticated" && (
     <>
       <Toolbar sx={{ minHeight: "64px !important" }} />
@@ -87,38 +125,219 @@ const ResponsiveDrawer = (props) => {
         subheader={role}
         titleTypographyProps={{ component: "title", variant: "body1" }}
       />
-      <CardActions></CardActions>
+      {/* <CardActions></CardActions> */}
       <Divider />
-      <List>
+      <Divider />
+      <List sx={{ pt: 0 }}>
         {drawerLinks.map((link, index) => (
-          <Link href={link.link} key={link.link} passHref>
-            <ListItemButton component="a">
-              <ListItemIcon>{link.icon}</ListItemIcon>
-              <ListItemText primary={link.text} />
-            </ListItemButton>
-          </Link>
+          <React.Fragment key={link.link}>
+            <Link href={link.link} passHref>
+              <ListItemButton
+                component="a"
+                sx={{
+                  backgroundColor:
+                    router.pathname === link.link ? "secondary.light" : "white",
+                  color:
+                    router.pathname === link.link
+                      ? "secondary.dark"
+                      : "primary.dark",
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    color:
+                      router.pathname === link.link
+                        ? "secondary.dark"
+                        : "primary.dark",
+                  }}
+                >
+                  {link.icon}
+                </ListItemIcon>
+                <ListItemText primary={link.text} />
+              </ListItemButton>
+            </Link>
+            <Divider />
+          </React.Fragment>
         ))}
-      </List>
-      <Divider />
-      <List>
+        {/* </List> */}
+        {/* <Divider /> */}
+        {/* <List> */}
         {role === "Farmer" &&
-          farmerLinks.map((link, index) => (
-            <Link href={link.link} key={link.link} passHref>
-              <ListItemButton component="a">
-                <ListItemIcon>{link.icon}</ListItemIcon>
-                <ListItemText primary={link.text} />
-              </ListItemButton>
-            </Link>
-          ))}
+          farmerLinks.map((link, index) =>
+            Array.isArray(link) ? (
+              <React.Fragment key={`Farmer${index}`}>
+                <ListItemButton onClick={handleClick}>
+                  <ListItemIcon
+                    sx={{
+                      color: "primary.dark",
+                    }}
+                  >
+                    <LightbulbIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Predictions" />
+                  {open ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Divider />
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {link.map((subLinks, index) => (
+                      <React.Fragment key={subLinks.link}>
+                        <Link href={subLinks.link} passHref>
+                          <ListItemButton
+                            component="a"
+                            sx={{
+                              pl: 4,
+                              backgroundColor:
+                                router.pathname === subLinks.link
+                                  ? "secondary.light"
+                                  : "white",
+                              color:
+                                router.pathname === subLinks.link
+                                  ? "secondary.dark"
+                                  : "primary.dark",
+                            }}
+                          >
+                            <ListItemIcon
+                              sx={{
+                                color:
+                                  router.pathname === subLinks.link
+                                    ? "secondary.dark"
+                                    : "primary.dark",
+                              }}
+                            >
+                              {subLinks.icon}
+                            </ListItemIcon>
+                            <ListItemText primary={subLinks.text} />
+                          </ListItemButton>
+                        </Link>
+                        <Divider />
+                      </React.Fragment>
+                    ))}
+                  </List>
+                </Collapse>
+                <Divider />
+              </React.Fragment>
+            ) : (
+              <React.Fragment key={link.link}>
+                <Link href={link.link} passHref>
+                  <ListItemButton
+                    component="a"
+                    sx={{
+                      backgroundColor:
+                        router.pathname === link.link
+                          ? "secondary.light"
+                          : "white",
+                      color:
+                        router.pathname === link.link
+                          ? "secondary.dark"
+                          : "primary.dark",
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        color:
+                          router.pathname === link.link
+                            ? "secondary.dark"
+                            : "primary.dark",
+                      }}
+                    >
+                      {link.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={link.text} />
+                  </ListItemButton>
+                </Link>
+                <Divider />
+              </React.Fragment>
+            )
+          )}
         {role === "Admin" &&
-          adminLinks.map((link, index) => (
-            <Link href={link.link} key={link.link} passHref>
-              <ListItemButton component="a">
-                <ListItemIcon>{link.icon}</ListItemIcon>
-                <ListItemText primary={link.text} />
-              </ListItemButton>
-            </Link>
-          ))}
+          adminLinks.map((link, index) =>
+            Array.isArray(link) ? (
+              <React.Fragment key={`Admin${index}`}>
+                <ListItemButton onClick={handleClick}>
+                  <ListItemIcon
+                    sx={{
+                      color: "primary.dark",
+                    }}
+                  >
+                    <LightbulbIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Predictions" />
+                  {open ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Divider />
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {link.map((subLinks, index) => (
+                      <React.Fragment key={subLinks.link}>
+                        <Link href={subLinks.link} passHref>
+                          <ListItemButton
+                            component="a"
+                            sx={{
+                              pl: 4,
+                              backgroundColor:
+                                router.pathname === subLinks.link
+                                  ? "secondary.light"
+                                  : "white",
+                              color:
+                                router.pathname === subLinks.link
+                                  ? "secondary.dark"
+                                  : "primary.dark",
+                            }}
+                          >
+                            <ListItemIcon
+                              sx={{
+                                color:
+                                  router.pathname === subLinks.link
+                                    ? "secondary.dark"
+                                    : "primary.dark",
+                              }}
+                            >
+                              {subLinks.icon}
+                            </ListItemIcon>
+                            <ListItemText primary={subLinks.text} />
+                          </ListItemButton>
+                        </Link>
+                        <Divider />
+                      </React.Fragment>
+                    ))}
+                  </List>
+                </Collapse>
+                <Divider />
+              </React.Fragment>
+            ) : (
+              <React.Fragment key={link.link}>
+                <Link href={link.link} passHref>
+                  <ListItemButton
+                    component="a"
+                    sx={{
+                      backgroundColor:
+                        router.pathname === link.link
+                          ? "secondary.light"
+                          : "default",
+                      color:
+                        router.pathname === link.link
+                          ? "secondary.dark"
+                          : "primary.dark",
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        color:
+                          router.pathname === link.link
+                            ? "secondary.dark"
+                            : "primary.dark",
+                      }}
+                    >
+                      {link.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={link.text} />
+                  </ListItemButton>
+                </Link>
+                <Divider />
+              </React.Fragment>
+            )
+          )}
       </List>
       <Button
         variant="contained"

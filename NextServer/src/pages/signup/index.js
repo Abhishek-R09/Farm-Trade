@@ -86,6 +86,7 @@ const SignupPage = () => {
       setAlertMsg("Successfully Registered! Please check email to confirm!");
       setOpen(true);
     } catch (error) {
+      console.log(error);
       setError(true);
       setErrorMsg(error.response?.data.message || "Something went wrong!");
     }

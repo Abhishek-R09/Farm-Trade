@@ -76,7 +76,7 @@ export default function MenuAppBar(props) {
                   color: "text.primary",
                 }}
               >
-                FarmTrade
+                FarmPort
               </Typography>
             </Link>
           </div>

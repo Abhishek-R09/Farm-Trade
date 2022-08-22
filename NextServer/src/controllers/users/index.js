@@ -49,3 +49,24 @@ export const getParticipatedAuctions = async (payload) => {
     return { error: true, code: 500, msg: err };
   }
 };
+
+export const getFarmers = async () => {
+  try {
+    await dbConnect();
+    const users = await User.find({}, "username roles")
+      .populate({
+        path: "roles",
+        select: "name",
+        match: { name: "Farmer" },
+      })
+      .exec();
+    // console.log(users);
+    if (!users) {
+      return { error: true, code: 401, message: "User Not found." };
+    }
+
+    return users;
+  } catch (err) {
+    return { error: true, code: 500, msg: err };
+  }
+};

@@ -22,7 +22,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 const FarmerForm = (props) => {
-  const { status } = useSession();
+  const { status, data } = useSession();
 
   const [alertMsg, setAlertMsg] = useState("");
   const [open, setOpen] = useState(false);
@@ -69,8 +69,18 @@ const FarmerForm = (props) => {
       }
       setLoading(false);
     };
-    getCrops();
-  }, []);
+    if (
+      data?.user?.user?.roles.length > 0 &&
+      data?.user?.user?.roles[0]?.name !== "Buyer"
+    )
+      getCrops();
+  }, [data]);
+
+  if (
+    data?.user?.user?.roles.length > 0 &&
+    data?.user?.user?.roles[0]?.name === "Buyer"
+  )
+    return <h1>Not Allowed!</h1>;
 
   const handleSubmit = async (e) => {
     // check if any of the fields are empty
