@@ -84,6 +84,7 @@ export default NextAuth({
           //   auctionsParticipated: user.auctionsParticipated,
           // });
           // console.log("response set");
+          console.log(user);
 
           return {
             id: user._id,
